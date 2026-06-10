@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第36区自治会</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif;background:#f0f7ff;color:#2d2d2b;line-height:1.7;min-height:100vh}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+/* ===== オダワラボ色調：明るく親しみやすいパレット ===== */
+:root{
+  /* メイン：相模湾ブルー */
+  --blue:#3a8fc7;
+  --blue-dark:#1e6fa3;
+  --blue-light:#e6f3fb;
+  --blue-pale:#d0eaf9;
+  /* アクセント：片浦レモン */
+  --lemon:#f5c842;
+  --lemon-light:#fef7d0;
+  /* サブ：みかんオレンジ */
+  --orange:#f07d2a;
+  --orange-light:#fdeedd;
+  /* 足柄の緑（控えめに） */
+  --green:#4caf82;
+  --green-light:#e8f7ef;
+  /* 梅ピンク */
+  --pink:#e8688a;
+  --pink-light:#fde8ef;
+  /* ニュートラル */
+  --bg:#f0f7ff;
+  --bg2:#e8f2fa;
+  --white:#ffffff;
+  --border:#c8dff0;
+  --text:#1e3a4f;
+  --text2:#4a6a80;
+  --text3:#7a9ab0;
+  --shadow:0 2px 12px rgba(58,143,199,0.10);
+  --shadow-hover:0 4px 20px rgba(58,143,199,0.18);
+  --radius:12px;
+}
+
+/* ===== ヘッダー ===== */
+#site-header{
+  position:sticky;top:0;z-index:100;
+  background:var(--blue);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;height:54px;
+  box-shadow:0 2px 10px rgba(30,111,163,0.25);
+}
+#site-header .site-title{
+  color:#fff;font-size:17px;font-weight:700;letter-spacing:.04em;
+}
+#hamburger-btn{
+  background:none;border:none;cursor:pointer;
+  display:flex;flex-direction:column;justify-content:center;gap:5px;
+  padding:8px;border-radius:8px;transition:background .2s;
+}
+#hamburger-btn:hover{background:rgba(255,255,255,0.2)}
+#hamburger-btn span{display:block;width:24px;height:2px;background:#fff;border-radius:2px;transition:transform .3s,opacity .3s}
+#hamburger-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+#hamburger-btn.open span:nth-child(2){opacity:0}
+#hamburger-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ===== ドロワー ===== */
+#drawer{
+  position:fixed;top:54px;right:0;bottom:0;
+  width:min(300px,85vw);background:var(--white);
+  transform:translateX(100%);transition:transform .3s ease;
+  z-index:99;overflow-y:auto;
+  box-shadow:-4px 0 24px rgba(30,111,163,0.15);
+  padding:16px 0 40px;
+}
+#drawer.open{transform:translateX(0)}
+#drawer-overlay{display:none;position:fixed;inset:0;background:rgba(30,80,120,0.35);z-index:98}
+#drawer-overlay.open{display:block}
+.drawer-section-label{
+  padding:14px 20px 6px;font-size:11px;color:var(--text3);
+  font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+}
+.drawer-item{
+  display:flex;align-items:center;gap:10px;
+  padding:13px 22px;font-size:15px;color:var(--text);
+  border-bottom:1px solid var(--border);transition:background .15s;
+}
+.drawer-item:hover{background:var(--blue-light)}
+.drawer-item .di-icon{font-size:20px;width:26px;text-align:center}
+.drawer-item .di-ext{margin-left:auto;font-size:11px;color:var(--text3)}
+.drawer-item.admin{color:var(--blue-dark);font-weight:700}
+.drawer-divider{height:1px;background:var(--border);margin:6px 0}
+.drawer-loading{padding:14px 22px;font-size:13px;color:var(--text3)}
+
+/* ===== ヒーロー ===== */
+#hero{width:100%;background:var(--blue-dark);line-height:0}
+#hero img{width:100%;height:auto;display:block}
+#hero-placeholder{
+  width:100%;aspect-ratio:4/1;background:linear-gradient(120deg,var(--blue) 0%,var(--blue-dark) 100%);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:18px;font-weight:700;letter-spacing:.08em;
+}
+
+/* ===== レイアウト ===== */
+.page-wrap{max-width:1100px;margin:0 auto;padding:20px 12px 60px}
+@media(min-width:768px){.page-wrap{padding:28px 24px 80px}}
+.main-grid{display:grid;grid-template-columns:1fr;gap:20px}
+@media(min-width:768px){.main-grid{grid-template-columns:1fr 290px;gap:24px}}
+
+/* ===== カード共通 ===== */
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.card-header{
+  padding:14px 18px;font-size:16px;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+}
+.card-header.blue{background:var(--blue);color:#fff}
+.card-header.sky{background:var(--blue-light);color:var(--blue-dark);border-bottom:2px solid var(--blue-pale)}
+.card-header .ch-tag{
+  font-size:11px;padding:2px 10px;border-radius:99px;
+  background:rgba(255,255,255,0.25);font-weight:400;margin-left:auto;
+}
+.card-body{padding:16px}
+
+/* ===== メインメニュー ===== */
+.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:400px){.menu-grid{grid-template-columns:repeat(3,1fr)}}
+.menu-btn{
+  background:var(--white);
+  border:2px solid var(--blue-pale);
+  border-radius:var(--radius);
+  padding:16px 8px;
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  cursor:pointer;transition:all .2s;
+  color:var(--text);font-size:14px;font-weight:700;text-align:center;line-height:1.3;
+  box-shadow:0 1px 6px rgba(58,143,199,0.08);
+}
+.menu-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:var(--shadow-hover);transform:translateY(-1px)}
+.menu-btn .mi{font-size:26px;line-height:1}
+
+/* ===== PDF一覧 ===== */
+.pdf-tier{margin-bottom:18px}
+.pdf-tier:last-child{margin-bottom:0}
+.tier-label{
+  font-size:13px;font-weight:700;color:var(--blue-dark);
+  padding:7px 12px;background:var(--blue-pale);border-radius:6px;
+  margin-bottom:8px;display:flex;align-items:center;gap:6px;
+  border-left:3px solid var(--blue);
+}
+.pdf-list{list-style:none}
+.pdf-item{border-bottom:1px solid var(--border)}
+.pdf-item:last-child{border-bottom:none}
+.pdf-link{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 4px;font-size:15px;color:var(--text);transition:color .15s;
+}
+.pdf-link:hover{color:var(--blue)}
+.pdf-link .pi{font-size:20px;flex-shrink:0;color:var(--blue)}
+.pdf-link .pn{flex:1;line-height:1.4}
+.pdf-link .pa{color:var(--text3);font-size:13px}
+.pdf-empty{padding:20px;text-align:center;color:var(--text3);font-size:14px}
+.pdf-loading{padding:16px;text-align:center;color:var(--text3);font-size:13px}
+
+/* ===== バックナンバー ===== */
+.bn-block{margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--border)}
+.bn-block:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.bn-title{
+  font-size:14px;font-weight:700;color:var(--blue-dark);
+  margin-bottom:10px;padding-bottom:6px;
+  border-bottom:2px solid var(--blue-pale);
+  display:flex;align-items:center;gap:6px;
+}
+.bn-controls{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.bn-select{
+  flex:1;min-width:90px;padding:9px 32px 9px 12px;font-size:15px;
+  border:1px solid var(--border);border-radius:8px;background:var(--white);
+  color:var(--text);appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%233a8fc7' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+}
+.bn-btn{
+  padding:9px 18px;background:var(--blue);color:#fff;
+  border:none;border-radius:8px;font-size:15px;font-weight:700;
+  cursor:pointer;transition:background .2s;white-space:nowrap;
+}
+.bn-btn:hover{background:var(--blue-dark)}
+.bn-months{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.bn-month-btn{
+  padding:7px 14px;border:1px solid var(--border);border-radius:8px;
+  background:var(--white);font-size:14px;cursor:pointer;
+  transition:all .15s;color:var(--text);
+}
+.bn-month-btn:hover{border-color:var(--blue);color:var(--blue)}
+.bn-month-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:700}
+.bn-files{margin-top:4px}
+
+/* ===== サイドバー ===== */
+.sidebar{display:flex;flex-direction:column;gap:16px}
+.side-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.side-header{
+  padding:11px 16px;font-size:13px;font-weight:700;
+  color:var(--blue-dark);background:var(--blue-light);
+  border-bottom:1px solid var(--blue-pale);
+}
+.side-body{padding:10px}
+.link-item{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 8px;border-bottom:1px solid var(--border);
+  font-size:14px;color:var(--text);transition:background .15s;border-radius:6px;
+}
+.link-item:last-child{border-bottom:none}
+.link-item:hover{background:var(--blue-light)}
+.link-item .li-icon{font-size:18px;flex-shrink:0}
+.link-item .li-ext{margin-left:auto;font-size:11px;color:var(--text3)}
+.link-item.admin-link{color:var(--blue-dark);font-weight:700}
+.side-loading{padding:14px;font-size:13px;color:var(--text3)}
+
+/* ===== トースト ===== */
+#toast{
+  position:fixed;bottom:20px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--text);color:#fff;
+  padding:12px 22px;border-radius:10px;
+  font-size:14px;transition:transform .3s;z-index:200;pointer-events:none;
+}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ===== フッター ===== */
+footer{
+  text-align:center;padding:20px;font-size:12px;
+  color:var(--text3);border-top:1px solid var(--border);
+  background:var(--white);margin-top:40px;
+}
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <div class="site-title" id="header-title">自治会ポータル</div>
+  <button id="hamburger-btn" aria-label="メニューを開く">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div id="drawer-overlay"></div>
+
+<nav id="drawer" aria-label="サイトメニュー">
+  <div class="drawer-section-label">周辺リンク</div>
+  <div id="drawer-links"><div class="drawer-loading">読み込み中...</div></div>
+  <div class="drawer-divider"></div>
+  <div class="drawer-section-label">市公式アプリ</div>
+  <div id="drawer-apps"><div class="drawer-loading">読み込み中...</div></div>
+  <div class="drawer-divider"></div>
+  <div class="drawer-section-label">役員専用</div>
+  <a class="drawer-item" href="renraku.html">
+    <span class="di-icon">📢</span>お知らせ
+  </a>
+  <a class="drawer-item admin" href="admin.html">
+    <span class="di-icon">🔐</span>役員管理画面
+  </a>
+</nav>
+
+<div id="hero">
+  <img id="hero-img" src="" alt="自治会看板" style="display:none">
+  <div id="hero-placeholder">読み込み中...</div>
+</div>
+
+<main class="page-wrap">
+
+  <!-- メインメニュー -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-header blue">📋 メニュー</div>
+    <div class="card-body">
+      <div class="menu-grid">
+        <button class="menu-btn" onclick="smoothScroll('#current-pdfs')">
+          <span class="mi">📄</span>今月のお知らせ
+        </button>
+        <button class="menu-btn" onclick="smoothScroll('#backnumber')">
+          <span class="mi">📚</span>バックナンバー
+        </button>
+        <button class="menu-btn" onclick="document.getElementById('hamburger-btn').click()">
+          <span class="mi">🔗</span>リンク集
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div>
+      <!-- 当月PDF -->
+      <div class="card" id="current-pdfs">
+        <div class="card-header blue">
+          📄 今月の配布物・回覧
+          <span class="ch-tag" id="current-month-label">読み込み中</span>
+        </div>
+        <div class="card-body">
+          <div class="pdf-tier">
+            <div class="tier-label">🏛️ 小田原市からのお知らせ</div>
+            <ul class="pdf-list" id="list-city"><li class="pdf-loading">読み込み中...</li></ul>
+          </div>
+          <div class="pdf-tier">
+            <div class="tier-label">🗺️ <span id="district-label">地区</span>からのお知らせ</div>
+            <ul class="pdf-list" id="list-district"><li class="pdf-loading">読み込み中...</li></ul>
+          </div>
+          <div class="pdf-tier">
+            <div class="tier-label">🏠 <span id="ward-label">区</span>からのお知らせ</div>
+            <ul class="pdf-list" id="list-ward"><li class="pdf-loading">読み込み中...</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- バックナンバー -->
+      <div class="card" style="margin-top:20px" id="backnumber">
+        <div class="card-header sky">📚 バックナンバー</div>
+        <div class="card-body">
+          <div class="bn-block">
+            <div class="bn-title">🏛️ 小田原市</div>
+            <div class="bn-controls">
+              <select class="bn-select" id="bn-year-city"></select>
+              <button class="bn-btn" onclick="loadBnMonths('city')">表示</button>
+            </div>
+            <div class="bn-months" id="bn-months-city"></div>
+            <div class="bn-files"  id="bn-files-city"></div>
+          </div>
+          <div class="bn-block">
+            <div class="bn-title">🗺️ <span class="dn"></span></div>
+            <div class="bn-controls">
+              <select class="bn-select" id="bn-year-district"></select>
+              <button class="bn-btn" onclick="loadBnMonths('district')">表示</button>
+            </div>
+            <div class="bn-months" id="bn-months-district"></div>
+            <div class="bn-files"  id="bn-files-district"></div>
+          </div>
+          <div class="bn-block">
+            <div class="bn-title">🏠 <span class="wn"></span></div>
+            <div class="bn-controls">
+              <select class="bn-select" id="bn-year-ward"></select>
+              <button class="bn-btn" onclick="loadBnMonths('ward')">表示</button>
+            </div>
+            <div class="bn-months" id="bn-months-ward"></div>
+            <div class="bn-files"  id="bn-files-ward"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- サイドバー -->
+    <aside class="sidebar">
+      <div class="side-card">
+        <div class="side-header">🔗 関連リンク</div>
+        <div class="side-body" id="sidebar-links"><div class="side-loading">読み込み中...</div></div>
+      </div>
+      <div class="side-card">
+        <div class="side-header">📱 市公式アプリ</div>
+        <div class="side-body" id="sidebar-apps"><div class="side-loading">読み込み中...</div></div>
+      </div>
+      <div class="side-card">
+        <div class="side-header">🔐 役員専用</div>
+        <div class="side-body">
+          <a class="link-item" href="renraku.html">
+            <span class="li-icon">📢</span>お知らせ
+          </a>
+          <a class="link-item admin-link" href="admin.html">
+            <span class="li-icon">🔐</span>役員管理画面
+          </a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <p id="footer-name">小田原市自治会ポータル</p>
+  <p style="margin-top:4px">Powered by GitHub Pages + Google Apps Script</p>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+const MASTER_GAS_URL = "https://script.google.com/macros/s/AKfycbzjKuqp8GOyUjnLmkBESCfyYUJ4EKDkIND-EKHsgu2AEdmUQVkvS8Os6CcwjNsLlpOlng/exec"; // ← master_gas.js のデプロイURLに書き換える
+const BASE_URL = "https://odawara-jichikai.github.io/odawara-jichikai/";
+const CACHE_TTL = 30 * 60 * 1000;
+
+let gasUrls = { city:null, district:null, ward:null };
+const now = new Date();
+const YEAR  = String(now.getFullYear());
+const MONTH = String(now.getMonth()+1).padStart(2,"0");
+
+// ハンバーガー
+const hBtn = document.getElementById("hamburger-btn");
+const drawer = document.getElementById("drawer");
+const overlay = document.getElementById("drawer-overlay");
+hBtn.addEventListener("click", () => {
+  const open = drawer.classList.toggle("open");
+  hBtn.classList.toggle("open", open);
+  overlay.classList.toggle("open", open);
+});
+overlay.addEventListener("click", () => {
+  drawer.classList.remove("open");
+  hBtn.classList.remove("open");
+  overlay.classList.remove("open");
+});
+
+function smoothScroll(sel){
+  const el = document.querySelector(sel);
+  if(el) el.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+async function fetchWithCache(url, key){
+  try{
+    const c = sessionStorage.getItem(key);
+    if(c){ const {data,ts}=JSON.parse(c); if(Date.now()-ts<CACHE_TTL) return data; }
+  }catch(e){}
+  try{
+    const res = await fetch(url);
+    const data = await res.json();
+    try{ sessionStorage.setItem(key, JSON.stringify({data,ts:Date.now()})); }catch(e){}
+    return data;
+  }catch(err){
+    try{ const c=sessionStorage.getItem(key); if(c) return JSON.parse(c).data; }catch(e){}
+    return null;
+  }
+}
+
+function getKuCode(){ return new URLSearchParams(location.search).get("ku"); }
+
+function escHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+// リンク・アプリをスプレッドシートから描画
+function renderLinks(items, sideEl, drawerEl){
+  if(!items||!items.length){
+    if(sideEl) sideEl.innerHTML='<div class="side-loading">リンクがありません</div>';
+    if(drawerEl) drawerEl.innerHTML='';
+    return;
+  }
+  const sideHtml = items.map(it=>`
+    <a class="link-item" href="${escHtml(it.url)}" target="_blank" rel="noopener">
+      <span class="li-icon">${escHtml(it.icon||'🔗')}</span>
+      ${escHtml(it.label)}
+      <span class="li-ext">↗</span>
+    </a>`).join("");
+  const drawerHtml = items.map(it=>`
+    <a class="drawer-item" href="${escHtml(it.url)}" target="_blank" rel="noopener">
+      <span class="di-icon">${escHtml(it.icon||'🔗')}</span>
+      ${escHtml(it.label)}
+      <span class="di-ext">↗</span>
+    </a>`).join("");
+  if(sideEl) sideEl.innerHTML = sideHtml;
+  if(drawerEl) drawerEl.innerHTML = drawerHtml;
+}
+
+async function init(){
+  const kuCode = getKuCode();
+  document.getElementById("current-month-label").textContent =
+    YEAR+"年"+Number(MONTH)+"月";
+
+  const masterUrl = MASTER_GAS_URL + (kuCode ? "?ku="+kuCode : "");
+  const info = await fetchWithCache(masterUrl, "master_"+(kuCode||"sample"));
+  if(!info||!info.ok){ showToast("区情報の取得に失敗しました"); return; }
+
+  // 名称セット
+  if(info.ku_name){
+    document.title = info.ku_name;
+    document.getElementById("header-title").textContent = info.ku_name;
+    document.getElementById("footer-name").textContent = info.ku_name;
+    document.getElementById("ward-label").textContent = info.ku_name;
+    document.querySelectorAll(".wn").forEach(el=>el.textContent=info.ku_name);
+  }
+  if(info.district_name){
+    document.getElementById("district-label").textContent = info.district_name;
+    document.querySelectorAll(".dn").forEach(el=>el.textContent=info.district_name);
+  }
+
+  // ヒーロー画像
+  const img = document.getElementById("hero-img");
+  img.src = BASE_URL+(info.hero_image||"images/ku036-hero.jpg");
+  img.onload = ()=>{ img.style.display="block"; document.getElementById("hero-placeholder").style.display="none"; };
+  img.onerror = ()=>{ document.getElementById("hero-placeholder").textContent = info.ku_name||"自治会ポータル"; };
+
+  // GAS URL保存
+  gasUrls.city     = info.city_gas_url;
+  gasUrls.district = info.district_gas_url;
+  gasUrls.ward     = info.ward_gas_url || info.ku_gas_url;
+
+  // リンク・アプリ取得（マスターGASの links アクション）
+  const linksUrl = MASTER_GAS_URL + "?action=getLinks" + (kuCode ? "&ku="+kuCode : "");
+  const linksData = await fetchWithCache(linksUrl, "links_"+(kuCode||"sample"));
+  if(linksData && linksData.ok){
+    renderLinks(
+      linksData.links||[],
+      document.getElementById("sidebar-links"),
+      document.getElementById("drawer-links")
+    );
+    renderLinks(
+      linksData.apps||[],
+      document.getElementById("sidebar-apps"),
+      document.getElementById("drawer-apps")
+    );
+  } else {
+    // フォールバック：デフォルトリンク
+    const defLinks = [
+      {icon:"🏛️",label:"小田原市公式HP",url:"https://www.city.odawara.kanagawa.jp/"},
+      {icon:"🤝",label:"自治会総連合HP",url:"https://www.odawara-jichiren.or.jp/"}
+    ];
+    const defApps = [
+      {icon:"📱",label:"小田原市アプリ",url:"https://www.city.odawara.kanagawa.jp/municipality/DX/odawara-app.html"}
+    ];
+    renderLinks(defLinks, document.getElementById("sidebar-links"), document.getElementById("drawer-links"));
+    renderLinks(defApps,  document.getElementById("sidebar-apps"),  document.getElementById("drawer-apps"));
+  }
+
+  // PDF並行取得
+  await Promise.all([
+    loadCurrentPdfs("city",    "list-city"),
+    loadCurrentPdfs("district","list-district"),
+    loadCurrentPdfs("ward",    "list-ward"),
+  ]);
+
+  // バックナンバー年初期化
+  await Promise.all([
+    initBnYears("city"),
+    initBnYears("district"),
+    initBnYears("ward"),
+  ]);
+}
+
+async function loadCurrentPdfs(tier, listId){
+  const url = gasUrls[tier];
+  const el  = document.getElementById(listId);
+  if(!url){ renderPdfList(el,[]); return; }
+  const data = await fetchWithCache(
+    url+"?action=getPdfList&year="+YEAR+"&month="+MONTH,
+    "pdf_"+tier+"_"+YEAR+"_"+MONTH
+  );
+  if(!data||!data.ok){ el.innerHTML='<li class="pdf-empty">取得できませんでした</li>'; return; }
+  renderPdfList(el, data.files||[]);
+}
+
+function renderPdfList(el, files){
+  if(!files.length){ el.innerHTML='<li class="pdf-empty">現在、配布物はありません</li>'; return; }
+  el.innerHTML = files.map(f=>`
+    <li class="pdf-item">
+      <a class="pdf-link" href="${escHtml(f.url)}" target="_blank" rel="noopener">
+        <span class="pi">📄</span>
+        <span class="pn">${escHtml(f.filename.replace(/\.(pdf|json)$/i,""))}</span>
+        <span class="pa">▶</span>
+      </a>
+    </li>`).join("");
+}
+
+async function initBnYears(tier){
+  const url = gasUrls[tier];
+  const sel = document.getElementById("bn-year-"+tier);
+  if(!url) return;
+  const data = await fetchWithCache(url+"?action=getAvailableYears","years_"+tier);
+  const years = (data&&data.ok&&data.years&&data.years.length) ? data.years : [YEAR];
+  sel.innerHTML = years.map(y=>`<option value="${y}"${y===YEAR?" selected":""}>${y}年</option>`).join("");
+}
+
+async function loadBnMonths(tier){
+  const url  = gasUrls[tier];
+  const year = document.getElementById("bn-year-"+tier).value;
+  const mEl  = document.getElementById("bn-months-"+tier);
+  const fEl  = document.getElementById("bn-files-"+tier);
+  if(!url) return;
+  mEl.innerHTML='<span style="color:var(--text3);font-size:13px">読み込み中...</span>';
+  fEl.innerHTML="";
+  const data = await fetchWithCache(url+"?action=getPdfList&year="+year,"bn_"+tier+"_"+year);
+  if(!data||!data.ok||!data.files){
+    mEl.innerHTML='<span style="color:var(--text3);font-size:13px">データがありません</span>'; return;
+  }
+  const months = [...new Set((data.files||[]).map(f=>f.month))].sort();
+  if(!months.length){
+    mEl.innerHTML='<span style="color:var(--text3);font-size:13px">この年のデータはありません</span>'; return;
+  }
+  mEl.innerHTML = months.map(m=>
+    `<button class="bn-month-btn" onclick="loadBnFiles('${tier}','${year}','${m}',this)">${Number(m)}月</button>`
+  ).join("");
+  mEl.querySelector(".bn-month-btn:last-child")?.click();
+}
+
+async function loadBnFiles(tier, year, month, btn){
+  const url  = gasUrls[tier];
+  const fEl  = document.getElementById("bn-files-"+tier);
+  const mEl  = document.getElementById("bn-months-"+tier);
+  mEl.querySelectorAll(".bn-month-btn").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  const data = await fetchWithCache(
+    url+"?action=getPdfList&year="+year+"&month="+month,
+    "bn_"+tier+"_"+year+"_"+month
+  );
+  const files = (data&&data.ok) ? (data.files||[]) : [];
+  const ul = document.createElement("ul");
+  ul.className="pdf-list";
+  renderPdfList(ul, files);
+  fEl.innerHTML="";
+  fEl.appendChild(ul);
+}
+
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),3000);
+}
+
+init();
+</script>
+</body>
+</html>
