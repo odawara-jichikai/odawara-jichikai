@@ -415,6 +415,46 @@ overlay.addEventListener("click", () => {
   overlay.classList.remove("open");
 });
 
+// サンプルモード：地区・区・役員専用エリアを非表示
+function showSampleMode(){
+  // 当月PDF：地区・区エリアを非表示
+  const tierDistrict = document.getElementById("tier-district");
+  const tierWard     = document.getElementById("tier-ward");
+  if(tierDistrict) tierDistrict.style.display = "none";
+  if(tierWard)     tierWard.style.display     = "none";
+
+  // バックナンバー：地区・区ブロックを非表示
+  const bnDistrict = document.getElementById("bn-district");
+  const bnWard     = document.getElementById("bn-ward");
+  if(bnDistrict) bnDistrict.style.display = "none";
+  if(bnWard)     bnWard.style.display     = "none";
+
+  // サイドバー：役員専用カードを非表示
+  document.querySelectorAll(".side-card").forEach(card => {
+    const header = card.querySelector(".side-header");
+    if(header && header.textContent.includes("役員専用")){
+      card.style.display = "none";
+    }
+  });
+
+  // ドロワー：役員専用項目を非表示
+  document.querySelectorAll(".drawer-item.admin, .drawer-item[href='admin.html'], .drawer-item[href='renraku.html']").forEach(el => {
+    el.style.display = "none";
+  });
+  // ドロワーの役員専用ラベルも非表示
+  document.querySelectorAll(".drawer-section-label").forEach(el => {
+    if(el.textContent.includes("役員専用")) el.style.display = "none";
+  });
+  // ドロワーの区切り線（役員専用の直前）も非表示
+  const dividers = document.querySelectorAll(".drawer-divider");
+  if(dividers.length >= 2) dividers[dividers.length-1].style.display = "none";
+
+  // タイトル変更
+  document.title = "小田原市自治会ポータル（サンプル）";
+  const footerName = document.getElementById("footer-name");
+  if(footerName) footerName.textContent = "小田原市自治会ポータル";
+}
+
 function smoothScroll(sel){
   const el = document.querySelector(sel);
   if(el) el.scrollIntoView({behavior:"smooth",block:"start"});
@@ -473,7 +513,21 @@ async function init(){
 
   const masterUrl = MASTER_GAS_URL + (kuCode ? "?ku="+kuCode : "");
   const info = await fetchWithCache(masterUrl, "master_"+(kuCode||"sample"));
-  if(!info||!info.ok){ showToast("区情報の取得に失敗しました"); return; }
+
+  // パラメータなし＝サンプルモード（市情報のみ表示）
+  const isSample = !kuCode;
+  if(!info||!info.ok){
+    if(!isSample) showToast("区情報の取得に失敗しました");
+    // サンプルモード時は市エリアのみ表示してエラーは出さない
+    if(isSample){
+      document.getElementById("current-month-label").textContent =
+        YEAR+"年"+Number(MONTH)+"月";
+      document.getElementById("header-title").textContent = "小田原市自治会ポータル";
+      showSampleMode();
+      return;
+    }
+    return;
+  }
 
   // 名称セット
   if(info.ku_name){
@@ -499,6 +553,9 @@ async function init(){
   gasUrls.city     = info.city_gas_url;
   gasUrls.district = info.district_gas_url;
   gasUrls.ward     = info.ward_gas_url || info.ku_gas_url;
+
+  // サンプルモードの場合は地区・区エリアを非表示
+  if(isSample) showSampleMode();
 
   // リンク・アプリ取得（マスターGASの links アクション）
   const linksUrl = MASTER_GAS_URL + "?action=getLinks" + (kuCode ? "&ku="+kuCode : "");
@@ -527,19 +584,21 @@ async function init(){
     renderLinks(defApps,  document.getElementById("sidebar-apps"),  document.getElementById("drawer-apps"));
   }
 
-  // PDF並行取得
-  await Promise.all([
-    loadCurrentPdfs("city",    "list-city"),
-    loadCurrentPdfs("district","list-district"),
-    loadCurrentPdfs("ward",    "list-ward"),
-  ]);
+  // PDF並行取得（サンプルモードは市のみ）
+  const pdfTasks = [loadCurrentPdfs("city", "list-city")];
+  if(!isSample){
+    pdfTasks.push(loadCurrentPdfs("district","list-district"));
+    pdfTasks.push(loadCurrentPdfs("ward",    "list-ward"));
+  }
+  await Promise.all(pdfTasks);
 
-  // バックナンバー年初期化
-  await Promise.all([
-    initBnYears("city"),
-    initBnYears("district"),
-    initBnYears("ward"),
-  ]);
+  // バックナンバー年初期化（サンプルモードは市のみ）
+  const bnTasks = [initBnYears("city")];
+  if(!isSample){
+    bnTasks.push(initBnYears("district"));
+    bnTasks.push(initBnYears("ward"));
+  }
+  await Promise.all(bnTasks);
 }
 
 async function loadCurrentPdfs(tier, listId){
