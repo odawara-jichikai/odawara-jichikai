@@ -375,7 +375,7 @@ let rules = []; // [{ nth, weekdays:[], typeId }, ...]（最大10件）
 
 function renderRuleRows(){
   if(!rules.length){
-    rules = Array.from({length:10}, () => ({ nth:"every", weekdays:[], typeId:"" }));
+    rules = Array.from({length:16}, () => ({ nth:"every", weekdays:[], typeId:"" }));
   }
   const listEl = document.getElementById("rule-list");
   listEl.innerHTML = rules.map((rule, i) => `
