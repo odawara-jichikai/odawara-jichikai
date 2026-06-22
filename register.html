@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>担当者 パスワード登録</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif;background:#f0f7ff;color:#1e3a4f;min-height:100vh}
+
+:root{
+  --blue:#3a8fc7;--blue-dark:#1e6fa3;--blue-light:#e6f3fb;--blue-pale:#d0eaf9;
+  --green:#4caf82;--green-light:#e8f7ef;
+  --red:#e05c5c;--red-light:#fdeaea;
+  --border:#c8dff0;--white:#fff;
+  --text:#1e3a4f;--text2:#4a6a80;--text3:#7a9ab0;
+  --shadow:0 2px 12px rgba(58,143,199,0.10);--radius:12px;
+}
+
+header{background:var(--blue);padding:0 20px;height:54px;display:flex;align-items:center;box-shadow:0 2px 8px rgba(30,111,163,0.2)}
+header h1{color:#fff;font-size:17px;font-weight:700}
+header .subtitle{color:rgba(255,255,255,0.75);font-size:12px;margin-left:12px}
+
+.page{max-width:480px;margin:0 auto;padding:24px 16px 60px}
+
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px}
+.card-header{padding:14px 18px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;background:var(--blue);color:#fff}
+.card-body{padding:20px}
+
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:13px;font-weight:700;color:var(--text2);margin-bottom:6px}
+.form-input{
+  width:100%;padding:11px 14px;font-size:15px;
+  border:1px solid var(--border);border-radius:8px;
+  background:var(--white);color:var(--text);transition:border-color .2s;
+}
+.form-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(58,143,199,0.12)}
+.form-hint{font-size:12px;color:var(--text3);margin-top:6px;line-height:1.5}
+
+/* コード種別バッジ */
+.code-badge{
+  display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:12px;
+  margin-top:6px;
+}
+.code-badge.ward{background:#dcefc8;color:#3a5a1a}
+.code-badge.district{background:#bfe6f2;color:#1a4a6a}
+.code-badge.none{display:none}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 24px;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-full{width:100%}
+
+.status{padding:12px 14px;border-radius:8px;font-size:13px;margin-top:14px;display:none;line-height:1.6}
+.status.success{background:var(--green-light);color:#1a6b3a;display:block}
+.status.error{background:var(--red-light);color:#8b2020;display:block}
+.status.loading{background:var(--blue-light);color:var(--blue-dark);display:block}
+
+.intro{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:18px}
+.result-box{
+  background:var(--green-light);border-radius:10px;padding:18px;
+  text-align:center;display:none;
+}
+.result-box.show{display:block}
+.result-box .ri{font-size:32px;margin-bottom:8px}
+.result-box .rt{font-size:15px;font-weight:700;color:#1a6b3a;margin-bottom:4px}
+.result-box .rs{font-size:13px;color:var(--text2)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔑 担当者 パスワード登録</h1>
+  <span class="subtitle">初回登録・パスワード再設定</span>
+</header>
+
+<main class="page">
+
+  <div class="card">
+    <div class="card-header">📋 ご案内</div>
+    <div class="card-body">
+      <div class="intro">
+        配布された「コード」と「初期パスワード」を使って、ご自身の新しいパスワードを設定してください。<br><br>
+        区担当者は数字のコード（例：061）、地区担当者は英字のコード（例：ashigara）を入力してください。
+        入力したコードによって、区か地区かが自動的に判別されます。<br><br>
+        設定が完了すると、専用のPDF保管フォルダが自動的に用意され、
+        以降は新しいパスワードでログインできるようになります。<br><br>
+        担当者が交代した場合やパスワードを忘れた場合は、市担当者に「初期パスワードへの差し戻し」を依頼してください。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="form-card">
+    <div class="card-header">🔑 パスワード登録</div>
+    <div class="card-body">
+
+      <div class="form-group">
+        <label class="form-label">コード（区コードまたは地区コード）</label>
+        <input class="form-input" type="text" id="code-input" placeholder="例：061（区）または ashigara（地区）" autocomplete="off">
+        <div class="code-badge none" id="code-badge"></div>
+        <div class="form-hint">数字のみ→区、英字→地区として自動判別します。</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">初期パスワード</label>
+        <input class="form-input" type="password" id="initial-pw-input" placeholder="配布された初期パスワード" autocomplete="off">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">新しいパスワード</label>
+        <input class="form-input" type="text" id="new-pw-input" placeholder="4文字以上で入力してください" autocomplete="off" data-lpignore="true" data-1p-ignore>
+        <div class="form-hint">入力した文字がそのまま画面に表示されます。周囲に見られないようご注意ください。</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">新しいパスワード（確認用）</label>
+        <input class="form-input" type="text" id="new-pw-confirm-input" placeholder="もう一度入力してください" autocomplete="off" data-lpignore="true" data-1p-ignore>
+        <div class="form-hint">設定したパスワードは忘れないよう、必ず控えておいてください。</div>
+      </div>
+
+      <button class="btn btn-primary btn-full" id="submit-btn" onclick="doRegister()">この内容で登録する</button>
+      <div class="status" id="register-status"></div>
+    </div>
+  </div>
+
+  <div class="result-box" id="result-box">
+    <div class="ri">✅</div>
+    <div class="rt" id="result-title">登録が完了しました</div>
+    <div class="rs" id="result-sub"></div>
+  </div>
+
+</main>
+
+<script>
+// ===== 設定 =====
+const GAS_URL = "YOUR_UNIFIED_GAS_URL"; // ← unified_gas.js のデプロイURLに書き換える
+
+// ===== コード入力：区か地区かを自動判別してバッジ表示 =====
+document.getElementById("code-input").addEventListener("input", updateCodeBadge);
+function updateCodeBadge(){
+  const raw   = document.getElementById("code-input").value.trim();
+  const badge = document.getElementById("code-badge");
+  const type  = detectCodeType(raw);
+  badge.className = "code-badge " + (type || "none");
+  badge.textContent = type === "ward" ? "📦 区コードとして処理します" :
+                      type === "district" ? "🏘️ 地区コードとして処理します" : "";
+}
+
+// コード種別判定：数字のみ→区、英字→地区、混在or空→null
+function detectCodeType(raw){
+  if(!raw) return null;
+  if(/^[0-9]+$/.test(raw)) return "ward";
+  if(/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(raw)) return "district";
+  return null;
+}
+
+async function doRegister(){
+  const rawCode    = document.getElementById("code-input").value.trim();
+  const initialPw  = document.getElementById("initial-pw-input").value;
+  const newPw      = document.getElementById("new-pw-input").value;
+  const newPwConf  = document.getElementById("new-pw-confirm-input").value;
+  const statusEl   = document.getElementById("register-status");
+  const btn        = document.getElementById("submit-btn");
+
+  const codeType = detectCodeType(rawCode);
+  if(!rawCode || !codeType){
+    showStatus(statusEl,"error","コードを正しく入力してください（数字→区、英字→地区）");
+    return;
+  }
+  if(!initialPw){ showStatus(statusEl,"error","初期パスワードを入力してください"); return; }
+  if(!newPw || newPw.length < 4){ showStatus(statusEl,"error","新しいパスワードは4文字以上で入力してください"); return; }
+  if(newPw !== newPwConf){ showStatus(statusEl,"error","新しいパスワード（確認用）が一致しません"); return; }
+
+  btn.disabled = true;
+  showStatus(statusEl,"loading","登録中...");
+
+  try{
+    let params;
+    if(codeType === "ward"){
+      params = new URLSearchParams({
+        action:             "registerWard",
+        kuCode:             rawCode,
+        initialPassword:    initialPw,
+        newPassword:        newPw,
+        newPasswordConfirm: newPwConf,
+      });
+    } else {
+      params = new URLSearchParams({
+        action:             "registerDistrict",
+        districtCode:       rawCode.toLowerCase(),
+        initialPassword:    initialPw,
+        newPassword:        newPw,
+        newPasswordConfirm: newPwConf,
+      });
+    }
+
+    const res  = await fetch(GAS_URL, { method:"POST", body:params });
+    const data = await res.json();
+
+    if(data.ok){
+      document.getElementById("form-card").style.display = "none";
+      statusEl.className = "status";
+      const resultBox = document.getElementById("result-box");
+      const nameLabel = data.kuName || data.districtName || "";
+      const codeLabel = data.kuCode || data.districtCode || rawCode;
+      document.getElementById("result-sub").textContent =
+        (nameLabel ? nameLabel + "（コード：" + codeLabel + "）" : "コード：" + codeLabel)
+        + " のパスワードを設定しました。新しいパスワードでPDF登録ページにログインできます。";
+      resultBox.classList.add("show");
+    } else {
+      showStatus(statusEl,"error","エラー："+data.error);
+      btn.disabled = false;
+    }
+  }catch(e){
+    showStatus(statusEl,"error","通信エラー："+e.message);
+    btn.disabled = false;
+  }
+}
+
+function showStatus(el, type, msg){
+  el.className = "status " + type;
+  el.textContent = msg;
+}
+</script>
+</body>
+</html>
