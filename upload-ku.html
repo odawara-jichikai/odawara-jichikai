@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>区担当者用 PDF登録管理</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif;background:#f0f7ff;color:#1e3a4f;min-height:100vh}
+
+:root{
+  --blue:#3a8fc7;--blue-dark:#1e6fa3;--blue-light:#e6f3fb;--blue-pale:#d0eaf9;
+  --green:#4caf82;--green-light:#e8f7ef;
+  --red:#e05c5c;--red-light:#fdeaea;
+  --orange:#f07d2a;--orange-light:#fdeedd;
+  --border:#c8dff0;--white:#fff;
+  --text:#1e3a4f;--text2:#4a6a80;--text3:#7a9ab0;
+  --shadow:0 2px 12px rgba(58,143,199,0.10);--radius:12px;
+}
+
+/* ヘッダー */
+header{background:var(--blue);padding:0 20px;height:54px;display:flex;align-items:center;box-shadow:0 2px 8px rgba(30,111,163,0.2)}
+header h1{color:#fff;font-size:17px;font-weight:700}
+header .subtitle{color:rgba(255,255,255,0.75);font-size:12px;margin-left:12px}
+
+/* ページ全体 */
+.page{max-width:680px;margin:0 auto;padding:24px 16px 60px}
+
+/* カード */
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px}
+.card-header{padding:14px 18px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;background:var(--blue);color:#fff}
+.card-header.sky{background:var(--blue-light);color:var(--blue-dark);border-bottom:1px solid var(--blue-pale)}
+.card-body{padding:20px}
+
+/* ログインエリア */
+#login-area{}
+.login-desc{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.7;padding:10px 14px;background:var(--blue-light);border-radius:8px}
+
+/* フォーム共通 */
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:13px;font-weight:700;color:var(--text2);margin-bottom:6px}
+.form-input,.form-select{
+  width:100%;padding:11px 14px;font-size:15px;
+  border:1px solid var(--border);border-radius:8px;
+  background:var(--white);color:var(--text);
+  transition:border-color .2s;appearance:none;
+}
+.form-select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%233a8fc7' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;
+}
+.form-input:focus,.form-select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(58,143,199,0.12)}
+.form-input[type="password"]{letter-spacing:.1em}
+
+/* ボタン */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#c04444}
+.btn-ghost{background:var(--blue-light);color:var(--blue-dark);border:1px solid var(--blue-pale)}
+.btn-ghost:hover{background:var(--blue-pale)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-full{width:100%}
+
+/* ファイル選択 */
+.file-drop{
+  border:2px dashed var(--border);border-radius:8px;padding:24px;
+  text-align:center;cursor:pointer;transition:all .2s;background:var(--blue-light);
+}
+.file-drop:hover,.file-drop.dragover{border-color:var(--blue);background:var(--blue-pale)}
+.file-drop .fd-icon{font-size:32px;margin-bottom:8px}
+.file-drop .fd-text{font-size:14px;color:var(--text2)}
+.file-drop .fd-sub{font-size:12px;color:var(--text3);margin-top:4px}
+.file-selected{font-size:13px;color:var(--green);margin-top:8px;font-weight:700}
+#file-input{display:none}
+
+/* ファイル一覧（削除用） */
+.file-list{list-style:none}
+.file-list-item{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 4px;border-bottom:1px solid var(--border);
+  font-size:14px;
+}
+.file-list-item:last-child{border-bottom:none}
+.file-list-item .fn{flex:1;color:var(--text)}
+.file-list-item .fd{font-size:11px;color:var(--text3)}
+
+/* ステータス */
+.status{padding:10px 14px;border-radius:8px;font-size:13px;margin-top:12px;display:none}
+.status.success{background:var(--green-light);color:#1a6b3a;display:block}
+.status.error{background:var(--red-light);color:#8b2020;display:block}
+.status.loading{background:var(--blue-light);color:var(--blue-dark);display:block}
+
+/* プログレスバー */
+.progress-wrap{margin-top:10px;display:none}
+.progress-wrap.show{display:block}
+.progress-bar{height:6px;background:var(--blue-pale);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--blue);border-radius:3px;transition:width .3s;width:0%}
+
+/* ロック画面 */
+#locked-overlay{
+  position:fixed;inset:0;background:rgba(30,58,79,0.85);
+  z-index:200;display:flex;align-items:center;justify-content:center;
+}
+.lock-box{
+  background:var(--white);border-radius:var(--radius);padding:32px 28px;
+  width:min(400px,90vw);box-shadow:0 8px 40px rgba(0,0,0,0.3);
+}
+.lock-box h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;text-align:center}
+.lock-box p{font-size:13px;color:var(--text2);text-align:center;margin-bottom:24px;line-height:1.6}
+.lock-error{color:var(--red);font-size:13px;text-align:center;margin-top:10px;min-height:20px}
+
+/* タブ */
+.tabs{display:flex;border-bottom:2px solid var(--blue-pale);margin-bottom:20px}
+.tab{padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab:hover{color:var(--blue)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* 月選択グリッド */
+.month-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.month-btn{padding:10px 4px;text-align:center;border:1px solid var(--border);border-radius:8px;font-size:14px;cursor:pointer;background:var(--white);color:var(--text);transition:all .15s}
+.month-btn:hover{border-color:var(--blue);color:var(--blue)}
+.month-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:700}
+
+/* 登録方法タブ */
+.method-tabs{display:flex;gap:8px;margin-bottom:10px}
+.method-tab{
+  flex:1;padding:10px;border:2px solid var(--border);border-radius:8px;
+  background:var(--white);font-size:14px;font-weight:700;cursor:pointer;
+  color:var(--text2);transition:all .2s;
+}
+.method-tab.active{border-color:var(--blue);background:var(--blue-light);color:var(--blue-dark)}
+.method-tab:hover{border-color:var(--blue)}
+
+/* トースト */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e3a4f;color:#fff;padding:12px 22px;border-radius:10px;font-size:14px;transition:transform .3s;z-index:300;pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ロック画面 -->
+<div id="locked-overlay">
+  <div class="lock-box">
+    <div style="text-align:center;font-size:40px;margin-bottom:12px">🔐</div>
+    <h2>区担当者用 PDF登録管理</h2>
+    <p>区担当者パスワードを入力してください。<br>このページは関係者専用です。</p>
+    <div class="form-group">
+      <input class="form-input" type="password" id="pw-input" placeholder="パスワード" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">ログイン</button>
+    <div class="lock-error" id="lock-error"></div>
+  </div>
+</div>
+
+<header>
+  <h1>🏘️ <span id="header-ku-name">区</span> PDF登録管理</h1>
+  <span class="subtitle">区担当者専用ページ</span>
+</header>
+
+<main class="page">
+
+  <!-- タブ切り替え -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('upload')">📤 PDF登録</div>
+    <div class="tab" onclick="switchTab('delete')">🗑️ PDF削除</div>
+    <div class="tab" onclick="switchTab('notice')">📣 お知らせ</div>
+  </div>
+
+  <!-- ===== PDF登録タブ ===== -->
+  <div class="tab-panel active" id="tab-upload">
+    <div class="card">
+      <div class="card-header">📤 PDFを登録する</div>
+      <div class="card-body">
+
+        <div class="form-group">
+          <label class="form-label">年</label>
+          <select class="form-select" id="up-year"></select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">月</label>
+          <select class="form-select" id="up-month">
+            <option value="01">1月</option><option value="02">2月</option>
+            <option value="03">3月</option><option value="04">4月</option>
+            <option value="05">5月</option><option value="06">6月</option>
+            <option value="07">7月</option><option value="08">8月</option>
+            <option value="09">9月</option><option value="10">10月</option>
+            <option value="11">11月</option><option value="12">12月</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">タイトル（ファイル名）</label>
+          <input class="form-input" type="text" id="up-title" placeholder="例：広報おだわら6月号">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">登録方法</label>
+          <div class="method-tabs">
+            <button class="method-tab active" id="tab-file-btn" onclick="switchMethod('file')">📁 ファイル選択</button>
+            <button class="method-tab" id="tab-url-btn" onclick="switchMethod('url')">🌐 URLから取得</button>
+          </div>
+        </div>
+
+        <!-- ファイル選択 -->
+        <div class="form-group" id="method-file">
+          <div class="file-drop" id="file-drop" onclick="document.getElementById('file-input').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+            <div class="fd-icon">📄</div>
+            <div class="fd-text">クリックまたはドラッグ＆ドロップ</div>
+            <div class="fd-sub">PDF・画像ファイル対応</div>
+          </div>
+          <input type="file" id="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileSelect(event)">
+          <div class="file-selected" id="file-selected-name"></div>
+        </div>
+
+        <!-- URL入力 -->
+        <div class="form-group" id="method-url" style="display:none">
+          <input class="form-input" type="url" id="up-url"
+            placeholder="https://例：www.city.odawara.kanagawa.jp/file/koho.pdf">
+          <div style="font-size:12px;color:var(--text3);margin-top:6px">
+            公開されているPDFのURLを貼り付けてください。GASがサーバー側で取得します。
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-full" id="upload-btn" onclick="doUpload()">
+          📤 登録する
+        </button>
+        <div class="progress-wrap" id="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+        <div class="status" id="upload-status"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PDF削除タブ ===== -->
+  <div class="tab-panel" id="tab-delete">
+    <div class="card">
+      <div class="card-header sky">🗑️ PDFを削除する</div>
+      <div class="card-body">
+
+        <div class="form-group">
+          <label class="form-label">年</label>
+          <select class="form-select" id="del-year"></select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">月を選択</label>
+          <div class="month-grid" id="del-month-grid">
+            <!-- JS生成 -->
+          </div>
+        </div>
+
+        <button class="btn btn-ghost" onclick="loadFileList()">📋 ファイル一覧を表示</button>
+        <div class="status" id="list-status"></div>
+
+        <ul class="file-list" id="file-list" style="margin-top:16px"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== お知らせタブ ===== -->
+  <div class="tab-panel" id="tab-notice">
+    <div class="card">
+      <div class="card-header sky">📣 お知らせを登録する</div>
+      <div class="card-body">
+        <div style="font-size:13px;color:var(--text3);margin-bottom:14px">
+          PDFを伴わない短いお知らせ（例：清掃活動の中止連絡など）を、本文1行だけで登録できます。
+          登録すると、この区の住民ページに直近5件まで一覧表示されます。
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">お知らせ本文</label>
+          <input class="form-input" type="text" id="notice-body" placeholder="例：6月19日　本日の清掃活動は雨天のため、中止となりました">
+        </div>
+
+        <button class="btn btn-primary btn-full" onclick="addNotice()">📣 登録する</button>
+        <div class="status" id="notice-status"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-header sky">登録済みのお知らせ</div>
+      <div class="card-body">
+        <button class="btn btn-ghost" onclick="loadNoticeList()">🔄 一覧を更新</button>
+        <ul class="file-list" id="notice-list" style="margin-top:16px"></ul>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+// ===== 設定 =====
+const GAS_URL = "YOUR_UNIFIED_GAS_URL"; // ← unified_gas.js のデプロイURLに書き換える
+const TIER    = "ward";
+// 認証(admin_pw_hash照合)・フォルダID取得(getRootFolderId)ともに ku_code を使用（GAS側の仕様）
+const KU_CODE = new URLSearchParams(location.search).get("ku") || "";
+const now     = new Date();
+const YEAR    = String(now.getFullYear());
+const MONTH   = String(now.getMonth()+1).padStart(2,"0");
+
+let sessionPwHash = null; // ログイン後にメモリ保持
+
+// ===== SHA-256ハッシュ生成（Web Crypto API） =====
+async function sha256(str){
+  const buf  = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+
+// ===== ログイン =====
+async function doLogin(){
+  const pw  = document.getElementById("pw-input").value;
+  const err = document.getElementById("lock-error");
+  if(!pw){ err.textContent="パスワードを入力してください"; return; }
+  if(!KU_CODE){ err.textContent="URLに?ku=区コードが指定されていません"; return; }
+
+  err.textContent = "確認中...";
+  const hash = await sha256(pw);
+
+  // GASでハッシュ照合（テスト用：getPdfListで認証チェック）
+  try{
+    const res  = await fetch(GAS_URL+"?action=getPdfList&tier="+TIER+"&ku="+KU_CODE+"&year="+YEAR+"&pwHash="+hash);
+    const data = await res.json();
+    // 認証エラーでなければログイン成功
+    if(data.error && data.error.includes("認証エラー")){
+      err.textContent = "パスワードが違います";
+      return;
+    }
+    // 成功
+    sessionPwHash = hash;
+    document.getElementById("locked-overlay").style.display = "none";
+    err.textContent = "";
+    initPage();
+  }catch(e){
+    err.textContent = "通信エラーが発生しました";
+  }
+}
+
+// Enterキーでログイン
+document.getElementById("pw-input").addEventListener("keydown", e=>{
+  if(e.key==="Enter") doLogin();
+});
+
+// ===== ページ初期化 =====
+function initPage(){
+  // 年プルダウン生成（来年・今年・5年前まで、デフォルトは今年）
+  const yearNum = Number(YEAR);
+  ["up-year","del-year"].forEach(id=>{
+    const sel = document.getElementById(id);
+    for(let y=yearNum+1; y>=yearNum-4; y--){
+      const opt = document.createElement("option");
+      opt.value = String(y);
+      opt.textContent = y+"年";
+      if(y===yearNum) opt.selected = true;
+      sel.appendChild(opt);
+    }
+  });
+
+  // 当月を月プルダウンで選択
+  document.getElementById("up-month").value = MONTH;
+
+  // 削除タブの月グリッド生成
+  const grid = document.getElementById("del-month-grid");
+  for(let m=1; m<=12; m++){
+    const mm = String(m).padStart(2,"0");
+    const btn = document.createElement("button");
+    btn.className = "month-btn" + (mm===MONTH?" active":"");
+    btn.textContent = m+"月";
+    btn.dataset.month = mm;
+    btn.onclick = ()=>{
+      grid.querySelectorAll(".month-btn").forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("file-list").innerHTML = "";
+      document.getElementById("list-status").className = "status";
+    };
+    grid.appendChild(btn);
+  }
+
+  // ヘッダーに区名を表示
+  loadKuName();
+}
+
+// ===== 区名取得（ヘッダー表示用） =====
+async function loadKuName(){
+  try{
+    const res  = await fetch(GAS_URL+"?action=getKuInfo&ku="+KU_CODE);
+    const data = await res.json();
+    if(data.ok && data.ku_name){
+      document.getElementById("header-ku-name").textContent = data.ku_name;
+      document.title = data.ku_name + " PDF登録管理";
+    }
+  }catch(e){
+    // 表示できなくても機能には影響しないため無視
+  }
+}
+
+// ===== タブ切り替え =====
+function switchTab(name){
+  document.querySelectorAll(".tab").forEach((t,i)=>{
+    const panels = document.querySelectorAll(".tab-panel");
+    const names  = ["upload","delete","notice"];
+    t.classList.toggle("active", names[i]===name);
+    panels[i].classList.toggle("active", names[i]===name);
+  });
+  if(name === "notice") loadNoticeList();
+}
+
+// ===== ファイル選択 =====
+let selectedFile = null;
+const MAX_FILE_SIZE_KU = 10 * 1024 * 1024; // 10MB
+
+function handleFileSelect(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > MAX_FILE_SIZE_KU){
+    showStatus(document.getElementById("upload-status"),"error",
+      "⚠️ ファイルサイズが上限（10MB）を超えています（"+Math.round(file.size/1024/1024*10)/10+"MB）。\nファイルを圧縮してから再度お試しください。");
+    document.getElementById("file-input").value = "";
+    selectedFile = null;
+    return;
+  }
+  selectedFile = file;
+  document.getElementById("file-selected-name").textContent = "✅ "+file.name;
+  // タイトルが空なら拡張子なしのファイル名を自動入力
+  const titleEl = document.getElementById("up-title");
+  if(!titleEl.value) titleEl.value = file.name.replace(/\.[^.]+$/, "");
+}
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById("file-drop").classList.remove("dragover");
+  const file = e.dataTransfer.files[0];
+  if(file){
+    if(file.size > MAX_FILE_SIZE_KU){
+      showStatus(document.getElementById("upload-status"),"error",
+        "⚠️ ファイルサイズが上限（10MB）を超えています（"+Math.round(file.size/1024/1024*10)/10+"MB）。\nファイルを圧縮してから再度お試しください。");
+      selectedFile = null;
+      return;
+    }
+    document.getElementById("file-input").files; // リセット不可のためselectedFileのみ更新
+    selectedFile = file;
+    document.getElementById("file-selected-name").textContent = "✅ "+file.name;
+    const titleEl = document.getElementById("up-title");
+    if(!titleEl.value) titleEl.value = file.name.replace(/\.[^.]+$/, "");
+  }
+}
+function handleDragOver(e){ e.preventDefault(); document.getElementById("file-drop").classList.add("dragover"); }
+function handleDragLeave(){ document.getElementById("file-drop").classList.remove("dragover"); }
+
+// キャッシュ警告を表示する共通関数
+function showCacheWarning(warning){
+  if(!warning) return;
+  const statusEl = document.getElementById("upload-status");
+  statusEl.className = "status error";
+  statusEl.textContent = warning;
+}
+
+// ===== アップロード =====
+async function doUpload(){
+  const year  = document.getElementById("up-year").value;
+  const month = document.getElementById("up-month").value;
+  const title = document.getElementById("up-title").value.trim();
+  const statusEl = document.getElementById("upload-status");
+  const btn      = document.getElementById("upload-btn");
+
+  if(!title){ showStatus(statusEl,"error","タイトルを入力してください"); return; }
+
+  // 登録方法の判定
+  const isUrlMethod = document.getElementById("tab-url-btn").classList.contains("active");
+  const upUrl = document.getElementById("up-url").value.trim();
+
+  if(isUrlMethod){
+    // URL方式：GASがサーバー側でPDFを取得
+    if(!upUrl){ showStatus(statusEl,"error","URLを入力してください"); return; }
+    if(!upUrl.startsWith("http")){ showStatus(statusEl,"error","正しいURLを入力してください"); return; }
+
+    btn.disabled = true;
+    showStatus(statusEl,"loading","URLからPDFを取得中...");
+    showProgress(30);
+
+    try{
+      const filename = title + ".pdf";
+      const params = new URLSearchParams({
+        action:   "addPdfFromUrl",
+        tier:     TIER,
+        ku:       KU_CODE,
+        year:     year,
+        month:    month,
+        title:    filename,
+        url:      upUrl,
+        pwHash:   sessionPwHash,
+      });
+      showProgress(60);
+      const res  = await fetch(GAS_URL, {method:"POST", body:params});
+      const data = await res.json();
+      showProgress(100);
+
+      if(data.ok){
+        showStatus(statusEl,"success","✅ 登録完了："+filename);
+        showToast("登録しました");
+        document.getElementById("up-title").value = "";
+        document.getElementById("up-url").value   = "";
+        if(data.cacheWarning) showCacheWarning(data.cacheWarning);
+      } else {
+        showStatus(statusEl,"error","エラー："+data.error);
+      }
+    }catch(e){
+      showStatus(statusEl,"error","通信エラー："+e.message);
+    } finally {
+      btn.disabled = false;
+      setTimeout(()=>hideProgress(),1000);
+    }
+
+  } else {
+    // ファイル方式：Base64でアップロード
+    if(!selectedFile){ showStatus(statusEl,"error","PDFファイルを選択してください"); return; }
+
+    btn.disabled = true;
+    showStatus(statusEl,"loading","アップロード中...");
+    showProgress(0);
+
+    try{
+      const base64   = await fileToBase64(selectedFile);
+      showProgress(40);
+      const ext      = selectedFile.name.split(".").pop();
+      const filename = title + "." + ext;
+      const params   = new URLSearchParams({
+        action:   "addPdf",
+        tier:     TIER,
+        ku:       KU_CODE,
+        year:     year,
+        month:    month,
+        title:    filename,
+        base64:   base64,
+        mimeType: selectedFile.type || "application/pdf",
+        pwHash:   sessionPwHash,
+      });
+      showProgress(70);
+      const res  = await fetch(GAS_URL, {method:"POST", body:params});
+      const data = await res.json();
+      showProgress(100);
+
+      if(data.ok){
+        showStatus(statusEl,"success","✅ 登録完了："+filename);
+        showToast("登録しました");
+        document.getElementById("up-title").value = "";
+        document.getElementById("file-selected-name").textContent = "";
+        document.getElementById("file-input").value = "";
+        selectedFile = null;
+        if(data.cacheWarning) showCacheWarning(data.cacheWarning);
+      } else {
+        showStatus(statusEl,"error","エラー："+data.error);
+      }
+    }catch(e){
+      showStatus(statusEl,"error","通信エラー："+e.message);
+    } finally {
+      btn.disabled = false;
+      setTimeout(()=>hideProgress(),1000);
+    }
+  }
+}
+
+// ===== ファイル一覧取得（削除用） =====
+async function loadFileList(){
+  const year  = document.getElementById("del-year").value;
+  const month = document.querySelector("#del-month-grid .month-btn.active")?.dataset.month;
+  const statusEl = document.getElementById("list-status");
+  const listEl   = document.getElementById("file-list");
+
+  if(!month){ showStatus(statusEl,"error","月を選択してください"); return; }
+
+  showStatus(statusEl,"loading","読み込み中...");
+  listEl.innerHTML = "";
+
+  try{
+    const res  = await fetch(GAS_URL+"?action=getPdfList&tier="+TIER+"&ku="+KU_CODE+"&year="+year+"&month="+month+"&pwHash="+sessionPwHash);
+    const data = await res.json();
+
+    if(!data.ok){ showStatus(statusEl,"error","エラー："+data.error); return; }
+    if(!data.files||!data.files.length){
+      showStatus(statusEl,"success",year+"年"+Number(month)+"月のファイルはありません");
+      return;
+    }
+
+    statusEl.className = "status";
+    listEl.innerHTML = data.files.map(f=>`
+      <li class="file-list-item">
+        <span class="fd">📄</span>
+        <span class="fn">${escHtml(f.filename)}</span>
+        <button class="btn btn-danger" style="padding:6px 14px;font-size:13px"
+          onclick="doDelete('${escHtml(f.fileId)}','${escHtml(f.filename)}',this)">
+          削除
+        </button>
+      </li>`).join("");
+  }catch(e){
+    showStatus(statusEl,"error","通信エラー："+e.message);
+  }
+}
+
+// ===== 削除 =====
+async function doDelete(fileId, filename, btn){
+  if(!confirm("「"+filename+"」を削除してよいですか？\nこの操作は取り消せません。")) return;
+  btn.disabled = true;
+  btn.textContent = "削除中...";
+
+  try{
+    const params = new URLSearchParams({
+      action: "deletePdf",
+      tier:   TIER,
+      ku:     KU_CODE,
+      fileId: fileId,
+      pwHash: sessionPwHash,
+    });
+    const res  = await fetch(GAS_URL, {method:"POST", body:params});
+    const data = await res.json();
+
+    if(data.ok){
+      btn.closest("li").remove();
+      showToast("削除しました");
+    } else {
+      btn.disabled = false;
+      btn.textContent = "削除";
+      showToast("エラー："+data.error);
+    }
+  }catch(e){
+    btn.disabled = false;
+    btn.textContent = "削除";
+    showToast("通信エラー");
+  }
+}
+
+// ===== ユーティリティ =====
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload  = ()=> resolve(reader.result.split(",")[1]);
+    reader.onerror = ()=> reject(new Error("ファイル読み込み失敗"));
+    reader.readAsDataURL(file);
+  });
+}
+
+function showStatus(el, type, msg){
+  el.className = "status "+type;
+  el.textContent = msg;
+}
+
+function showProgress(pct){
+  document.getElementById("progress-wrap").classList.add("show");
+  document.getElementById("progress-fill").style.width = pct+"%";
+}
+function hideProgress(){
+  document.getElementById("progress-wrap").classList.remove("show");
+  document.getElementById("progress-fill").style.width = "0%";
+}
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),3000);
+}
+
+// 登録方法切り替え
+function switchMethod(method){
+  const isFile = method === "file";
+  document.getElementById("method-file").style.display = isFile ? "" : "none";
+  document.getElementById("method-url").style.display  = isFile ? "none" : "";
+  document.getElementById("tab-file-btn").classList.toggle("active", isFile);
+  document.getElementById("tab-url-btn").classList.toggle("active", !isFile);
+  // ステータスをリセット
+  document.getElementById("upload-status").className = "status";
+}
+
+function escHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+// ===== お知らせ：登録 =====
+// 本文1行だけを入力すると、GAS側で「YYYY-MM-DD_本文.txt」として保存される
+async function addNotice(){
+  const body     = document.getElementById("notice-body").value.trim();
+  const statusEl = document.getElementById("notice-status");
+
+  if(!body){ showStatus(statusEl,"error","お知らせ本文を入力してください"); return; }
+
+  showStatus(statusEl,"loading","登録中...");
+  try{
+    const params = new URLSearchParams({
+      action: "addNotice",
+      tier:   TIER,
+      ku:     KU_CODE,
+      body:   body,
+      pwHash: sessionPwHash,
+    });
+    const res  = await fetch(GAS_URL, {method:"POST", body:params});
+    const data = await res.json();
+
+    if(data.ok){
+      showStatus(statusEl,"success","登録しました："+data.filename);
+      document.getElementById("notice-body").value = "";
+      loadNoticeList();
+    } else {
+      showStatus(statusEl,"error","エラー："+data.error);
+    }
+  }catch(e){
+    showStatus(statusEl,"error","通信エラー："+e.message);
+  }
+}
+
+// ===== お知らせ：一覧表示（直近5件） =====
+async function loadNoticeList(){
+  const listEl = document.getElementById("notice-list");
+  listEl.innerHTML = "読み込み中...";
+  try{
+    const res  = await fetch(GAS_URL+"?action=getNoticeList&tier="+TIER+"&ku="+KU_CODE+"&limit=5&pwHash="+sessionPwHash);
+    const data = await res.json();
+    if(!data.ok){ listEl.innerHTML = "エラー："+escHtml(data.error); return; }
+    if(!data.notices || !data.notices.length){ listEl.innerHTML = "登録されたお知らせはありません"; return; }
+
+    listEl.innerHTML = data.notices.map(n=>`
+      <li class="file-list-item">
+        <span class="fn">${escHtml(n.content)}</span>
+        <button class="btn btn-danger" style="padding:6px 14px;font-size:13px"
+          onclick="doDeleteNotice('${escHtml(n.fileId)}','${escHtml(n.content)}',this)">
+          削除
+        </button>
+      </li>`).join("");
+  }catch(e){
+    listEl.innerHTML = "通信エラー："+escHtml(e.message);
+  }
+}
+
+// ===== お知らせ：削除 =====
+async function doDeleteNotice(fileId, content, btn){
+  if(!confirm("「"+content+"」を削除してよいですか？")) return;
+  btn.disabled = true;
+  btn.textContent = "削除中...";
+  try{
+    const params = new URLSearchParams({
+      action: "deleteNotice",
+      tier:   TIER,
+      ku:     KU_CODE,
+      fileId: fileId,
+      pwHash: sessionPwHash,
+    });
+    const res  = await fetch(GAS_URL, {method:"POST", body:params});
+    const data = await res.json();
+    if(data.ok){
+      btn.closest("li").remove();
+      showToast("削除しました");
+    } else {
+      btn.disabled = false;
+      btn.textContent = "削除";
+      showToast("エラー："+data.error);
+    }
+  }catch(e){
+    btn.disabled = false;
+    btn.textContent = "削除";
+    showToast("通信エラー");
+  }
+}
+</script>
+</body>
+</html>
