@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>自治会ポータル</title>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px;scroll-behavior:smooth}
@@ -126,24 +128,21 @@ img{display:block;max-width:100%}
 /* スマホ：ごみカレンダーをサイドバー（リンク集）より上に表示 */
 #garbage-cal-section{margin-top:0;display:none}
 
-/* ===== 独自カレンダー描画 ===== */
-.custom-cal{width:100%;border-collapse:collapse;font-size:13px}
-.custom-cal th{text-align:center;padding:6px 2px;font-size:12px;font-weight:700;border-bottom:2px solid var(--border)}
-.custom-cal th:first-child{color:#e05c5c}
-.custom-cal th:last-child{color:#3a8fc7}
-.custom-cal td{vertical-align:top;padding:4px 2px;border:1px solid #eef2f7;min-height:52px;width:14.28%}
-.custom-cal td.other-month{background:#f8f9fa;color:#bbb}
-.custom-cal td.today{background:#fffde7}
-.cal-day-num{font-size:12px;font-weight:700;margin-bottom:2px;color:#555}
-.cal-day-num.sun{color:#e05c5c}
-.cal-day-num.sat{color:#3a8fc7}
-.cal-day-num.today-num{background:#3a8fc7;color:#fff;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
-.cal-event{font-size:10px;padding:1px 4px;border-radius:3px;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:block;line-height:1.4}
-.cal-event.ward-event{background:#fde8e8;color:#7a1a1a;font-weight:700}
-.cal-nav-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border)}
-.cal-nav-row button{background:var(--blue-light);border:1px solid var(--border);border-radius:6px;padding:4px 12px;font-size:13px;cursor:pointer;color:var(--blue-dark)}
-.cal-nav-row .cal-month-title{font-size:15px;font-weight:700;color:var(--text)}
-.cal-legend{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;border-top:1px solid var(--border);font-size:11px}
+/* ===== FullCalendar カスタムスタイル ===== */
+#fullcal .fc-toolbar-title{font-size:15px!important;font-weight:700}
+#fullcal .fc-button{font-size:12px!important;padding:3px 10px!important;background:var(--blue)!important;border-color:var(--blue)!important}
+#fullcal .fc-button:hover{background:var(--blue-dark)!important;border-color:var(--blue-dark)!important}
+#fullcal .fc-daygrid-day-number{font-size:12px;color:var(--text)}
+#fullcal .fc-col-header-cell-cushion{font-size:12px;font-weight:700;color:var(--text2)}
+#fullcal .fc-col-header-cell:first-child .fc-col-header-cell-cushion{color:#e05c5c}
+#fullcal .fc-col-header-cell:last-child .fc-col-header-cell-cushion{color:#3a8fc7}
+#fullcal .fc-daygrid-day.fc-day-sun .fc-daygrid-day-number{color:#e05c5c}
+#fullcal .fc-daygrid-day.fc-day-sat .fc-daygrid-day-number{color:#3a8fc7}
+#fullcal .fc-daygrid-day.fc-day-today{background:#fffde7!important}
+#fullcal .fc-event{font-size:10px!important;padding:1px 3px!important;border:none!important;cursor:default!important;margin-bottom:1px!important}
+#fullcal .fc-event .fc-event-title{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#fullcal .fc-daygrid-event-dot{display:none!important}
+#fullcal .fc-toolbar.fc-header-toolbar{margin-bottom:8px!important;flex-wrap:wrap;gap:4px}
 .cal-legend-item{display:flex;align-items:center;gap:3px}
 .cal-legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 .main-grid{display:grid;grid-template-columns:1fr;gap:20px;width:100%}
@@ -375,15 +374,18 @@ footer{text-align:center;padding:20px;font-size:12px;color:var(--text3);border-t
         </div>
       </div><!-- /バックナンバーカード -->
 
-      <!-- ===== 住民向けカレンダー（バックナンバーの直下、コンテンツ列内） ===== -->
+      <!-- ===== 住民向けカレンダー ===== -->
       <div id="garbage-cal-section" class="card district-only" style="margin-top:20px;display:none">
         <div class="card-header sky" style="display:flex;align-items:center;justify-content:space-between">
           <span>🗑️ ごみと資源の収集日カレンダー</span>
-          <button id="cal-view-toggle" onclick="toggleCalView()" style="font-size:11px;padding:3px 10px;border:1px solid var(--blue);background:#fff;color:var(--blue);border-radius:6px;cursor:pointer">📅 Googleカレンダーで見る</button>
+          <button id="cal-view-toggle" onclick="toggleCalView()" style="font-size:11px;padding:3px 10px;border:1px solid var(--blue);background:#fff;color:var(--blue);border-radius:6px;cursor:pointer;white-space:nowrap">📅 Google表示</button>
         </div>
-        <!-- 独自描画エリア -->
-        <div id="custom-cal-wrap" class="card-body" style="padding:12px"></div>
-        <!-- iframeエリア（非表示切替用） -->
+        <!-- FullCalendarエリア（デフォルト） -->
+        <div id="fullcal-wrap" style="padding:8px">
+          <div id="fullcal"></div>
+          <div id="cal-legend" style="display:flex;flex-wrap:wrap;gap:6px;padding:8px 4px 4px;font-size:11px"></div>
+        </div>
+        <!-- iframeエリア（切替用） -->
         <div id="iframe-cal-wrap" style="display:none;padding:0">
           <iframe id="gcal-iframe" src="" style="width:100%;height:500px;border:none;display:block" frameborder="0" scrolling="no"></iframe>
           <div id="ward-iframe-wrap" style="display:none">
@@ -431,7 +433,7 @@ footer{text-align:center;padding:20px;font-size:12px;color:var(--text3);border-t
 
 <script>
 // ===== 設定 =====
-const MASTER_GAS_URL = "https://script.google.com/macros/s/AKfycbzHUZqW_APiZtQDUV8-8E-EI7gufPGisNhxA47hchF8_UTmwVjYyqfectC1l8DrvwRNRg/exec"; // ← unified_gas.js のデプロイURLに書き換える
+const MASTER_GAS_URL = "YOUR_MASTER_GAS_URL"; // ← unified_gas.js のデプロイURLに書き換える
 const BASE_URL = "https://odawara-jichikai.github.io/odawara-jichikai/";
 const CACHE_TTL = 30 * 60 * 1000; // 30分
 
@@ -955,32 +957,35 @@ function showToast(msg){
 let gcalTypes = []; // [{id,label,color,sort}]（おしらせバナーのごみの日表示でも使用）
 let CALENDAR_ID = null;
 let WARD_CALENDAR_ID = null;
-let CAL_USE_IFRAME = false; // false=独自描画（デフォルト）, true=iframe
-let calViewYear  = null;
-let calViewMonth = null;
+let CAL_USE_IFRAME = false;
+let fullCalInstance = null;
 
-// ごみカレンダー初期化（カレンダーIDを保存して独自描画を開始）
+// FullCalendarの色マップ（typeId → HEXカラー）
+function getColorMap(){
+  const map = {};
+  gcalTypes.forEach(t=>{ if(t.color) map[t.id] = t.color; });
+  return map;
+}
+
+// ごみカレンダー初期化
 function initGarbageCal(calendarId){
   if(!calendarId) return;
   CALENDAR_ID = calendarId;
-  const now = new Date();
-  calViewYear  = now.getFullYear();
-  calViewMonth = now.getMonth() + 1;
+  // iframe用srcもセット
+  document.getElementById("gcal-iframe").src = buildIframeSrc(calendarId);
   const sec = document.getElementById("garbage-cal-section");
   if(sec) sec.style.display = "block";
-  renderCustomCal(calViewYear, calViewMonth);
+  initFullCalendar();
 }
 
 // 区イベントカレンダー初期化
 function initWardCal(calendarId){
   if(!calendarId) return;
   WARD_CALENDAR_ID = calendarId;
-  // iframeのsrcもセット（切替用）
-  const src = buildIframeSrc(calendarId);
-  const wif = document.getElementById("ward-gcal-iframe");
-  if(wif) wif.src = src;
-  // 既にgarbagecalが表示中なら再描画（区イベントも合わせて表示）
-  if(calViewYear) renderCustomCal(calViewYear, calViewMonth);
+  document.getElementById("ward-gcal-iframe").src = buildIframeSrc(calendarId);
+  document.getElementById("ward-iframe-wrap").style.display = KU_CODE ? "block" : "none";
+  // FullCalendarが既に初期化済みなら再描画（区イベントを追加）
+  if(fullCalInstance) fullCalInstance.refetchEvents();
 }
 
 function buildIframeSrc(calendarId){
@@ -990,167 +995,556 @@ function buildIframeSrc(calendarId){
     + "&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0";
 }
 
-// iframe ⇔ 独自描画 切替
+// iframe ⇔ FullCalendar 切替
 function toggleCalView(){
   CAL_USE_IFRAME = !CAL_USE_IFRAME;
-  const btn       = document.getElementById("cal-view-toggle");
-  const customWrap= document.getElementById("custom-cal-wrap");
-  const iframeWrap= document.getElementById("iframe-cal-wrap");
-  const wardWrap  = document.getElementById("ward-iframe-wrap");
+  const btn      = document.getElementById("cal-view-toggle");
+  const fcWrap   = document.getElementById("fullcal-wrap");
+  const ifWrap   = document.getElementById("iframe-cal-wrap");
   if(CAL_USE_IFRAME){
-    customWrap.style.display = "none";
-    iframeWrap.style.display = "block";
-    if(CALENDAR_ID){
-      document.getElementById("gcal-iframe").src = buildIframeSrc(CALENDAR_ID);
-    }
-    if(WARD_CALENDAR_ID && KU_CODE){
-      wardWrap.style.display = "block";
-    }
-    btn.textContent = "🗓️ シンプル表示に戻す";
+    fcWrap.style.display = "none";
+    ifWrap.style.display = "block";
+    btn.textContent = "🗓️ シンプル表示";
   } else {
-    customWrap.style.display = "block";
-    iframeWrap.style.display = "none";
-    btn.textContent = "📅 Googleカレンダーで見る";
-    renderCustomCal(calViewYear, calViewMonth);
+    fcWrap.style.display = "block";
+    ifWrap.style.display = "none";
+    btn.textContent = "📅 Google表示";
+    if(fullCalInstance) fullCalInstance.render();
   }
 }
 
-// 独自カレンダー描画
-async function renderCustomCal(year, month){
-  calViewYear  = year;
-  calViewMonth = month;
-  const wrap = document.getElementById("custom-cal-wrap");
-  if(!wrap || CAL_USE_IFRAME) return;
-  wrap.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3)">読み込み中...</div>';
+// FullCalendar初期化
+function initFullCalendar(){
+  const el = document.getElementById("fullcal");
+  if(!el) return;
 
-  // ごみイベント・区イベントを並行取得
-  const promises = [];
-  if(DISTRICT_CODE){
-    promises.push(
-      fetch(GAS_URL+"?action=getTrashEventsPublic&district="+DISTRICT_CODE+"&year="+year+"&month="+month)
-        .then(r=>r.json()).catch(()=>({ok:false,events:{}}))
-    );
-  } else {
-    promises.push(Promise.resolve({ok:true,events:{}}));
-  }
-  if(KU_CODE){
-    promises.push(
-      fetch(GAS_URL+"?action=getWardEventsPublic&ku="+KU_CODE+"&year="+year+"&month="+month)
-        .then(r=>r.json()).catch(()=>({ok:false,events:{}}))
-    );
-  } else {
-    promises.push(Promise.resolve({ok:true,events:{}}));
-  }
+  // 既存インスタンスがあれば破棄
+  if(fullCalInstance){ fullCalInstance.destroy(); fullCalInstance = null; }
 
-  const [trashData, wardData] = await Promise.all(promises);
-  const trashEvents = (trashData.ok && trashData.events) ? trashData.events : {};
-  const wardEvents  = (wardData.ok  && wardData.events)  ? wardData.events  : {};
-
-  // カレンダーグリッド生成
-  const today   = new Date();
-  const firstDay= new Date(year, month-1, 1).getDay(); // 0=日
-  const lastDate= new Date(year, month, 0).getDate();
-  const prevLast= new Date(year, month-1, 0).getDate();
-
-  // ごみ色マップ
-  const colorMap = {};
-  gcalTypes.forEach(t=>{ colorMap[t.id] = t.color || "#dddddd"; });
-
-  // ごみ色凡例
-  const legendItems = gcalTypes.map(t=>
-    `<div class="cal-legend-item"><div class="cal-legend-dot" style="background:${t.color||'#ddd'}"></div><span>${t.label}</span></div>`
-  ).join("");
-  const wardLegend = KU_CODE
-    ? `<div class="cal-legend-item"><div class="cal-legend-dot" style="background:#fde8e8;border:1px solid #e84040"></div><span>区イベント</span></div>`
-    : "";
-
-  let html = `
-    <div class="cal-nav-row">
-      <button onclick="renderCustomCal(${month===1?year-1:year},${month===1?12:month-1})">◀</button>
-      <span class="cal-month-title">${year}年${month}月</span>
-      <button onclick="renderCustomCal(${month===12?year+1:year},${month===12?1:month+1})">▶</button>
-    </div>
-    <table class="custom-cal">
-      <thead><tr>
-        <th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th>
-      </tr></thead>
-      <tbody>`;
-
-  let dayCount = 1, nextDay = 1, row = 0;
-  while(dayCount <= lastDate){
-    html += "<tr>";
-    for(let col=0; col<7; col++){
-      if(row===0 && col<firstDay){
-        // 先月の日
-        const d = prevLast - firstDay + col + 1;
-        html += `<td class="other-month"><div class="cal-day-num">${d}</div></td>`;
-      } else if(dayCount > lastDate){
-        // 翌月の日
-        html += `<td class="other-month"><div class="cal-day-num">${nextDay++}</div></td>`;
-      } else {
-        const isToday = (year===today.getFullYear() && month===today.getMonth()+1 && dayCount===today.getDate());
-        const isSun = col===0, isSat = col===6;
-        const dateKey = year+"-"+String(month).padStart(2,"0")+"-"+String(dayCount).padStart(2,"0");
-        const dayClass = isSun?"sun":isSat?"sat":"";
-        const numHtml = isToday
-          ? `<div class="cal-day-num today-num">${dayCount}</div>`
-          : `<div class="cal-day-num ${dayClass}">${dayCount}</div>`;
-
-        // ごみイベント
-        let evHtml = "";
-        const tevs = trashEvents[dateKey] || [];
-        // typeIdのt番号順にソート
-        tevs.sort((a,b)=>{
-          const na=parseInt((a.typeId||"t99").replace("t",""),10);
-          const nb=parseInt((b.typeId||"t99").replace("t",""),10);
-          return na-nb;
-        });
-        tevs.forEach(ev=>{
-          const bg = colorMap[ev.typeId] || "#eeeeee";
-          // 文字色：背景色の輝度に応じて白/黒
-          evHtml += `<span class="cal-event" style="background:${bg};color:#333">${ev.label}</span>`;
-        });
-
-        // 区イベント
-        const wevs = wardEvents[dateKey] || [];
-        wevs.forEach(ev=>{
-          evHtml += `<span class="cal-event ward-event">📌${ev.label}</span>`;
-        });
-
-        html += `<td${isToday?' class="today"':''}>${numHtml}${evHtml}</td>`;
-        dayCount++;
-      }
+  fullCalInstance = new FullCalendar.Calendar(el, {
+    initialView: "dayGridMonth",
+    locale: "ja",
+    headerToolbar: { left: "prev", center: "title", right: "next,today" },
+    height: "auto",
+    fixedWeekCount: false,
+    events: fetchFullCalEvents,
+    eventDidMount: function(info){
+      // タイトルにツールチップ
+      info.el.title = info.event.title;
+    },
+    datesSet: function(){
+      updateCalLegend();
     }
-    html += "</tr>";
-    row++;
-  }
-
-  html += `</tbody></table>`;
-  if(legendItems || wardLegend){
-    html += `<div class="cal-legend">${legendItems}${wardLegend}</div>`;
-  }
-  wrap.innerHTML = html;
+  });
+  fullCalInstance.render();
 }
 
-// ごみの種類を取得（おしらせバナーのごみの日表示用）
-async function loadGcalTypes(){
+// FullCalendar用イベント取得関数
+async function fetchFullCalEvents(fetchInfo, successCallback, failureCallback){
   try{
-    const res  = await fetch(GAS_URL+"?action=getGarbageTypes");
-    const data = await res.json();
-    if(data.ok) gcalTypes = (data.trashTypes||[]).filter(t=>t.label);
-  }catch(e){}
+    const start = fetchInfo.start;
+    const end   = fetchInfo.end;
+    const events = [];
+    const colorMap = getColorMap();
+
+    // 表示範囲の月を全て取得（FullCalendarは前後月も含む範囲を渡す）
+    const months = [];
+    const cur = new Date(start.getFullYear(), start.getMonth(), 1);
+    while(cur <= end){
+      months.push({ year: cur.getFullYear(), month: cur.getMonth() + 1 });
+      cur.setMonth(cur.getMonth() + 1);
+    }
+
+    // 各月のイベントを並行取得
+    await Promise.all(months.map(async ({year, month}) => {
+      // ごみイベント
+      if(DISTRICT_CODE){
+        try{
+          const res  = await fetch(GAS_URL+"?action=getTrashEventsPublic&district="+DISTRICT_CODE+"&year="+year+"&month="+month);
+          const data = await res.json();
+          if(data.ok && data.events){
+            Object.entries(data.events).forEach(([dateKey, evList])=>{
+              evList.forEach(ev=>{
+                const color = colorMap[ev.typeId] || "#aaaaaa";
+                // 文字色：背景が暗い場合は白、明るい場合は黒
+                const textColor = isColorDark(color) ? "#ffffff" : "#333333";
+                events.push({
+                  title:           ev.label,
+                  start:           dateKey,
+                  allDay:          true,
+                  backgroundColor: color,
+                  borderColor:     color,
+                  textColor:       textColor,
+                  extendedProps:   { typeId: ev.typeId },
+                });
+              });
+            });
+          }
+        }catch(e){}
+      }
+
+      // 区イベント
+      if(KU_CODE && WARD_CALENDAR_ID){
+        try{
+          const res  = await fetch(GAS_URL+"?action=getWardEventsPublic&ku="+KU_CODE+"&year="+year+"&month="+month);
+          const data = await res.json();
+          if(data.ok && data.events){
+            Object.entries(data.events).forEach(([dateKey, evList])=>{
+              evList.forEach(ev=>{
+                events.push({
+                  title:           "📌 "+ev.label,
+                  start:           dateKey,
+                  allDay:          true,
+                  backgroundColor: "#e84040",
+                  borderColor:     "#e84040",
+                  textColor:       "#ffffff",
+                  extendedProps:   { isWard: true },
+                });
+              });
+            });
+          }
+        }catch(e){}
+      }
+    }));
+
+    successCallback(events);
+    updateCalLegend();
+  }catch(e){
+    failureCallback(e);
+  }
 }
 
-function ymdStr(d){
-  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+// 背景色が暗いか判定（白文字か黒文字かの選択用）
+function isColorDark(hex){
+  try{
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    return (r*0.299 + g*0.587 + b*0.114) < 140;
+  }catch(e){ return false; }
 }
 
-function escHtml(s){
-  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+// 凡例を更新
+function updateCalLegend(){
+  const el = document.getElementById("cal-legend");
+  if(!el) return;
+  let html = gcalTypes
+    .filter(t => t.label && t.color)
+    .map(t => `<div class="cal-legend-item"><div class="cal-legend-dot" style="background:${t.color}"></div><span>${t.label}</span></div>`)
+    .join("");
+  if(KU_CODE){
+    html += `<div class="cal-legend-item"><div class="cal-legend-dot" style="background:#e84040"></div><span>区イベント</span></div>`;
+  }
+  el.innerHTML = html;
 }
 
-// ===== 起動 =====
-init();
-</script>
-</body>
-</html>
+// ごみの日情報のHTMLを生成する
+// 20:00〜23:59 → 「明日のごみの日」
+// 0:00〜 8:30 → 「今日のごみの日」
+// それ以外 → 表示なし（空文字列を返す）
+async function buildGomiAlertHtml(){
+  if(!DISTRICT_CODE || !gcalTypes.length) return "";
+
+  const now   = new Date();
+  const h     = now.getHours();
+  const m     = now.getMinutes();
+  const totalMin = h * 60 + m;
+
+  // 表示対象の日付と見出しを決定
+  let targetDate, label;
+  if(totalMin >= 20 * 60){
+    // 20:00〜23:59 → 明日
+    targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    label = "明日のごみの日";
+  } else if(totalMin <= 8 * 60 + 30){
+    // 0:00〜8:30 → 今日
+    targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    label = "今日のごみの日";
+  } else {
+    return ""; // 対象時間外
+  }
+
+  const dateKey = ymdStr(targetDate);
+
+  // すでにcalendar-district.htmlで取得済みのeventsByDateを再利用
+  // ただしinitGarbageCal完了前の可能性があるため、必要なら直接取得
+  let events = (typeof eventsByDate !== "undefined" && Object.keys(eventsByDate).length > 0)
+    ? (eventsByDate[dateKey] || [])
+    : null;
+
+  // 取得できていない場合はAPIを呼ぶ
+  if(events === null){
+    try{
+      const y = targetDate.getFullYear();
+      const mo = targetDate.getMonth() + 1;
+      const res  = await fetch(GAS_URL + "?action=getTrashEventsPublic&district=" + DISTRICT_CODE + "&year=" + y + "&month=" + mo);
+      const data = await res.json();
+      events = (data.ok && data.events && data.events[dateKey]) ? data.events[dateKey] : [];
+    }catch(e){ events = []; }
+  }
+
+  if(!events || !events.length) return "";
+
+  // ごみの種類を名称に変換
+  const items = events.map(ev => {
+    const t = gcalTypes.find(g => g.id === ev.typeId);
+    return t ? t.label : ev.label;
+  }).filter(Boolean);
+
+  if(!items.length) return "";
+
+  return `<div class="gomi-alert">
+    <div class="gomi-alert-title">🗑️ ${escHtml(label)}</div>
+    ${items.map(l=>`<div class="gomi-alert-item">・${escHtml(l)}</div>`).join("")}
+  </div>`;
+}
+
+// ===== リンク描画 =====
+function renderLinks(items, sideEl, drawerEl){
+  if(!items||!items.length){
+    if(sideEl)   sideEl.innerHTML   = '<div class="side-loading">リンクがありません</div>';
+    if(drawerEl) drawerEl.innerHTML = "";
+    return;
+  }
+  if(sideEl) sideEl.innerHTML = items.map(it=>`
+    <a class="link-item" href="${escHtml(it.url)}" target="_blank" rel="noopener">
+      <span class="li-icon">
+        <img src="${escHtml(faviconUrl(it.url))}" alt="" onerror="onFaviconError(this)">
+        <span class="li-icon-fallback" style="display:none">🔗</span>
+      </span>
+      ${escHtml(it.label)}
+      <span class="li-ext">↗</span>
+    </a>`).join("");
+  if(drawerEl) drawerEl.innerHTML = items.map(it=>`
+    <a class="drawer-item" href="${escHtml(it.url)}" target="_blank" rel="noopener">
+      <span class="di-icon">
+        <img src="${escHtml(faviconUrl(it.url))}" alt="" onerror="onFaviconError(this)">
+        <span class="di-icon-fallback" style="display:none">🔗</span>
+      </span>
+      ${escHtml(it.label)}
+      <span class="di-ext">↗</span>
+    </a>`).join("");
+}
+
+// ===== 初期化 =====
+async function init(){
+  KU_CODE = getKuCode();
+  const districtParam = new URLSearchParams(location.search).get("district");
+  if(districtParam && !KU_CODE) DISTRICT_CODE = districtParam;
+  document.getElementById("current-month-label").textContent = YEAR+"年"+Number(MONTH)+"月";
+
+  // マスターGASから区情報取得（ku=またはdistrict=を渡す）
+  const masterUrl = MASTER_GAS_URL
+    + (KU_CODE       ? "?ku="       + KU_CODE
+    : DISTRICT_CODE  ? "?district=" + DISTRICT_CODE
+    : "");
+  const info = await fetchWithCache(masterUrl, "master_"+(KU_CODE||"sample"));
+
+  if(!info || !info.ok){
+    if(KU_CODE) showToast("区情報の取得に失敗しました");
+    GAS_URL = MASTER_GAS_URL;
+    // フォールバック：並行取得
+    Promise.all([
+      loadCurrentPdfs("city","list-city"),
+      initBnYears("city"),
+      loadLinksWithFallback(null),
+    ]);
+    return;
+  }
+
+  // ===== kuパラメータあり：地区・区・役員専用を表示 =====
+  if(KU_CODE){
+    showKuOnlyElements();
+    showDistrictOnlyElements(); // 区表示時は地区も含む
+    const adminUrl = "upload-ku.html?ku=" + encodeURIComponent(KU_CODE);
+    const calUrl   = "calendar-ward.html?ku=" + encodeURIComponent(KU_CODE);
+    const drawerLink    = document.getElementById("drawer-admin-link");
+    const sidebarLink   = document.getElementById("sidebar-admin-link");
+    const drawerCalLink = document.getElementById("drawer-calendar-link");
+    const sideCalLink   = document.getElementById("sidebar-calendar-link");
+    if(drawerLink)    drawerLink.href    = adminUrl;
+    if(sidebarLink)   sidebarLink.href   = adminUrl;
+    if(drawerCalLink) drawerCalLink.href = calUrl;
+    if(sideCalLink)   sideCalLink.href   = calUrl;
+  }
+
+  // ===== 案B：名称・ヒーロー画像を即時表示 =====
+  if(info.ku_name){
+    document.title = info.ku_name;
+    document.getElementById("header-title").textContent = info.ku_name;
+    document.getElementById("footer-name").textContent  = info.ku_name;
+    document.getElementById("ward-label").textContent   = info.ku_name;
+    document.querySelectorAll(".wn").forEach(el=>el.textContent=info.ku_name);
+  }
+  if(info.district_name){
+    document.getElementById("district-label").textContent = info.district_name;
+    document.querySelectorAll(".dn").forEach(el=>el.textContent=info.district_name);
+  }
+  DISTRICT_CODE = info.district_code || null;
+
+  // ?district=のみアクセス：地区セクションを表示・タイトルをセット
+  if(!KU_CODE && DISTRICT_CODE){
+    showDistrictOnlyElements();
+    // タイトル・ヘッダに地区名をセット
+    const dName = info.district_name || DISTRICT_CODE;
+    document.title = dName;
+    document.getElementById("header-title").textContent = dName;
+    document.getElementById("footer-name").textContent  = dName;
+    document.getElementById("district-label").textContent = dName;
+    document.querySelectorAll(".dn").forEach(el=>el.textContent=dName);
+  }
+
+  // ヒーロー画像（即時セット）
+  const img = document.getElementById("hero-img");
+  const heroVal = info.hero_image || "";
+  const isLegacyOrEmpty = !heroVal || heroVal.startsWith("images/");
+  img.src = isLegacyOrEmpty
+    ? BASE_URL + "images/odawara-hero.jpg"
+    : heroVal;
+  img.onload  = ()=>{ img.style.display="block"; document.getElementById("hero-placeholder").style.display="none"; };
+  img.onerror = ()=>{ document.getElementById("hero-placeholder").textContent = info.ku_name||"自治会ポータル"; };
+
+  // 統合GAS URL（1本）
+  GAS_URL = info.city_gas_url || MASTER_GAS_URL;
+
+  // ===== 案A+B：残り全処理をバックグラウンドで並行実行 =====
+  // awaitしないことでヒーロー画像表示後すぐブラウザに制御を返す
+  const loadAll = async () => {
+    if(KU_CODE){
+      // リンク・PDF3本・バックナンバー年3本・カレンダーをすべて並行
+      await Promise.all([
+        loadLinksWithFallback(KU_CODE),
+        loadCurrentPdfs("city",     "list-city"),
+        loadCurrentPdfs("district", "list-district"),
+        loadCurrentPdfs("ward",     "list-ward"),
+        initBnYears("city"),
+        initBnYears("district"),
+        initBnYears("ward"),
+        _initCalendar(info),
+      ]);
+    } else if(DISTRICT_CODE){
+      await Promise.all([
+        loadLinksWithFallback(null),
+        loadCurrentPdfs("city",     "list-city"),
+        loadCurrentPdfs("district", "list-district"),
+        initBnYears("city"),
+        initBnYears("district"),
+        _initCalendar(info),
+      ]);
+    } else {
+      await Promise.all([
+        loadLinksWithFallback(null),
+        loadCurrentPdfs("city", "list-city"),
+        initBnYears("city"),
+      ]);
+    }
+  };
+  loadAll(); // awaitしない→バックグラウンドで並行実行
+}
+
+// ===== カレンダー・おしらせバナー初期化（分離） =====
+async function _initCalendar(info){
+  let calId = info.calendar_id || null;
+
+  // ?district=パラメータのみの場合はgetDistrictInfoからcalendar_idを取得
+  if(!calId && DISTRICT_CODE){
+    try{
+      const dRes  = await fetch(GAS_URL+"?action=getDistrictInfo&district="+DISTRICT_CODE);
+      const dData = await dRes.json();
+      if(dData.ok && dData.calendar_id) calId = dData.calendar_id;
+    }catch(e){}
+  }
+
+  if(calId || DISTRICT_CODE) await loadGcalTypes();
+  if(calId) initGarbageCal(calId);
+
+  // 区イベントカレンダー（?ku=のみ）
+  if(KU_CODE){
+    const wardCalId = info.ward_calendar_id || null;
+    if(wardCalId){
+      initWardCal(wardCalId);
+    } else {
+      // masterシートにward_calendar_idがない場合はGASに問い合わせ
+      try{
+        const res  = await fetch(GAS_URL+"?action=getWardCalendarId&ku="+KU_CODE);
+        const data = await res.json();
+        if(data.ok && data.calendarId) initWardCal(data.calendarId);
+      }catch(e){}
+    }
+  }
+
+  // おしらせバナー表示
+  if(KU_CODE){
+    loadNoticeBanner(KU_CODE);
+  } else if(DISTRICT_CODE){
+    loadNoticeBanner(null);
+  }
+}
+
+// ===== リンク・アプリ取得（フォールバック付き） =====
+async function loadLinksWithFallback(kuCode){
+  const districtQ = DISTRICT_CODE ? "&district="+DISTRICT_CODE : "";
+  const linksUrl  = MASTER_GAS_URL+"?action=getLinks"+(kuCode?"&ku="+kuCode:"")+districtQ;
+  const data      = await fetchWithCache(linksUrl,"links_"+(kuCode||"sample"));
+
+  const defLinks = [
+    {label:"小田原市公式HP",url:"https://www.city.odawara.kanagawa.jp/"},
+    {label:"自治会総連合HP",url:"https://www.odawara-jichiren.or.jp/"}
+  ];
+  const defApps = [
+    {label:"小田原市アプリ",url:"https://www.city.odawara.kanagawa.jp/municipality/DX/odawara-app.html"}
+  ];
+
+  renderLinks(
+    (data&&data.ok&&data.links) ? data.links : defLinks,
+    document.getElementById("sidebar-links"),
+    document.getElementById("drawer-links")
+  );
+  renderLinks(
+    (data&&data.ok&&data.apps) ? data.apps : defApps,
+    document.getElementById("sidebar-apps"),
+    document.getElementById("drawer-apps")
+  );
+
+  // 年間資料（ごみカレンダー等、年間を通して固定表示するもの）
+  const annualEl = document.getElementById("sidebar-annual");
+  if(annualEl){
+    const annual = (data&&data.ok&&data.annual) ? data.annual : [];
+    if(annual.length){
+      annualEl.innerHTML = annual.map(a=>
+        `<a class="link-item" href="${escHtml(a.url)}" target="_blank" rel="noopener">
+          <span class="li-icon">
+            <img src="${escHtml(faviconUrl(a.url))}" alt="" onerror="onFaviconError(this)">
+            <span class="li-icon-fallback" style="display:none">🔗</span>
+          </span>
+          ${escHtml(a.label)}
+        </a>`
+      ).join("");
+    } else {
+      annualEl.closest(".side-card")?.remove();
+    }
+  }
+}
+
+// ===== 当月以降PDF取得 =====
+async function loadCurrentPdfs(tier, listId){
+  const el = document.getElementById(listId);
+  if(!el) return;
+  if(!GAS_URL){ el.innerHTML='<li class="pdf-empty">取得できませんでした</li>'; return; }
+
+  const kuParam = KU_CODE ? "&ku="+KU_CODE : "";
+  const data    = await fetchWithCache(
+    GAS_URL+"?action=getPdfList"+kuParam+"&tier="+tier+"&year="+YEAR+"&currentOnly=1"+districtParam(tier),
+    "pdf_"+tier+"_"+YEAR+"_current"+(KU_CODE||"")
+  );
+  if(!data||!data.ok){ el.innerHTML='<li class="pdf-empty">取得できませんでした</li>'; return; }
+  renderPdfList(el, data.files||[]);
+}
+
+// ===== PDFリスト描画（月ヘッダー付き） =====
+function renderPdfList(el, files){
+  if(!files.length){ el.innerHTML='<li class="pdf-empty">現在、配布物はありません</li>'; return; }
+  let html="", lastMonth=null;
+  files.forEach(f=>{
+    if(f.month !== lastMonth){
+      const isFuture = f.month > MONTH;
+      html += `<li class="pdf-month-header${isFuture?" future":""}">
+        <span>${Number(f.month)}月のおしらせ</span>
+        ${isFuture?'<span class="future-badge">来月以降</span>':''}
+      </li>`;
+      lastMonth = f.month;
+    }
+    html += `<li class="pdf-item">
+      <a class="pdf-link" href="${escHtml(f.url)}" target="_blank" rel="noopener">
+        <span class="pi">📄</span>
+        <span class="pn">${escHtml(f.filename.replace(/\.(pdf|json)$/i,""))}</span>
+        <span class="pa">▶</span>
+      </a></li>`;
+  });
+  el.innerHTML = html;
+}
+
+// ===== バックナンバー：年プルダウン =====
+async function initBnYears(tier){
+  const sel = document.getElementById("bn-year-"+tier);
+  if(!sel||!GAS_URL) return;
+  const kuParam = KU_CODE ? "&ku="+KU_CODE : "";
+  const data    = await fetchWithCache(
+    GAS_URL+"?action=getAvailableYears"+kuParam+"&tier="+tier+districtParam(tier),
+    "years_"+tier+(KU_CODE||"")
+  );
+  const years = (data&&data.ok&&data.years&&data.years.length) ? data.years : [YEAR];
+  sel.innerHTML = years.map(y=>`<option value="${y}"${y===YEAR?" selected":""}>${y}年</option>`).join("");
+}
+
+// ===== バックナンバー：月ボタン =====
+async function loadBnMonths(tier){
+  const sel  = document.getElementById("bn-year-"+tier);
+  const year = sel ? sel.value : YEAR;
+  const mEl  = document.getElementById("bn-months-"+tier);
+  const fEl  = document.getElementById("bn-files-"+tier);
+  if(!mEl||!GAS_URL) return;
+  mEl.innerHTML='<span style="color:var(--text3);font-size:13px">読み込み中...</span>';
+  fEl.innerHTML="";
+
+  const kuParam = KU_CODE ? "&ku="+KU_CODE : "";
+  const data    = await fetchWithCache(
+    GAS_URL+"?action=getPdfList"+kuParam+"&tier="+tier+"&year="+year+districtParam(tier),
+    "bn_"+tier+"_"+year+(KU_CODE||"")
+  );
+  if(!data||!data.ok||!data.files){
+    mEl.innerHTML='<span style="color:var(--text3);font-size:13px">データがありません</span>'; return;
+  }
+  const months = [...new Set((data.files||[]).map(f=>f.month))].sort().reverse();
+  if(!months.length){
+    mEl.innerHTML='<span style="color:var(--text3);font-size:13px">この年のデータはありません</span>'; return;
+  }
+  mEl.innerHTML = months.map(m=>
+    `<button class="bn-month-btn" onclick="loadBnFiles('${tier}','${year}','${m}',this)">${Number(m)}月</button>`
+  ).join("");
+  mEl.querySelector(".bn-month-btn:first-child")?.click();
+}
+
+// ===== バックナンバー：ファイル一覧 =====
+async function loadBnFiles(tier, year, month, btn){
+  const fEl = document.getElementById("bn-files-"+tier);
+  const mEl = document.getElementById("bn-months-"+tier);
+  if(!fEl) return;
+  mEl.querySelectorAll(".bn-month-btn").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+
+  const kuParam = KU_CODE ? "&ku="+KU_CODE : "";
+  const data    = await fetchWithCache(
+    GAS_URL+"?action=getPdfList"+kuParam+"&tier="+tier+"&year="+year+"&month="+month+districtParam(tier),
+    "bn_"+tier+"_"+year+"_"+month+(KU_CODE||"")
+  );
+  const files = (data&&data.ok) ? (data.files||[]) : [];
+  const ul    = document.createElement("ul");
+  ul.className = "pdf-list";
+  renderPdfList(ul, files);
+  fEl.innerHTML="";
+  fEl.appendChild(ul);
+}
+
+// ===== トースト =====
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),3000);
+}
+
+// ===== 住民向けごみカレンダー =====
+let gcalTypes = []; // [{id,label,color,sort}]（おしらせバナーのごみの日表示でも使用）
+let CALENDAR_ID = null;
+let WARD_CALENDAR_ID = null;
+let CAL_USE_IFRAME = false;
+let fullCalInstance = null;
+
+// FullCalendarの色マップ（typeId → HEXカラー）
+function getColorMap(){
+  const map = {};
+  gcalTypes.forEach(t=>{ if(t.color) map[t.id] = t.color; });
+  return map;
+}
+
+
