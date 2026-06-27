@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>区イベントカレンダー管理</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif;background:#f0f7ff;color:#1e3a4f;min-height:100vh}
+
+:root{
+  --blue:#3a8fc7;--blue-dark:#1e6fa3;--blue-light:#e6f3fb;--blue-pale:#d0eaf9;
+  --green:#4caf82;--green-light:#e8f7ef;
+  --red:#e05c5c;--red-light:#fdeaea;
+  --tomato:#e84040;--tomato-light:#fde8e8;
+  --border:#c8dff0;--white:#fff;
+  --text:#1e3a4f;--text2:#4a6a80;--text3:#7a9ab0;
+  --shadow:0 2px 12px rgba(58,143,199,0.10);--radius:12px;
+}
+
+header{background:var(--blue);padding:0 20px;height:54px;display:flex;align-items:center;box-shadow:0 2px 8px rgba(30,111,163,0.2)}
+header h1{color:#fff;font-size:17px;font-weight:700}
+header .subtitle{color:rgba(255,255,255,0.75);font-size:12px;margin-left:12px}
+
+.page{max-width:680px;margin:0 auto;padding:24px 16px 60px}
+
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px}
+.card-header{padding:14px 18px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;background:var(--blue);color:#fff}
+.card-header.sky{background:var(--blue-light);color:var(--blue-dark);border-bottom:1px solid var(--blue-pale)}
+.card-header.tomato{background:var(--tomato-light);color:#7a1a1a;border-bottom:1px solid #f5c6c6}
+.card-body{padding:20px}
+
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:13px;font-weight:700;color:var(--text2);margin-bottom:6px}
+.form-input,.form-select{
+  width:100%;padding:11px 14px;font-size:15px;
+  border:1px solid var(--border);border-radius:8px;
+  background:var(--white);color:var(--text);transition:border-color .2s;
+}
+.form-input:focus,.form-select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(58,143,199,0.12)}
+.form-hint{font-size:12px;color:var(--text3);margin-top:6px;line-height:1.5}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#c04444}
+.btn-ghost{background:var(--blue-light);color:var(--blue-dark);border:1px solid var(--blue-pale)}
+.btn-ghost:hover{background:var(--blue-pale)}
+.btn-sm{padding:7px 14px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-full{width:100%}
+
+.status{padding:10px 14px;border-radius:8px;font-size:13px;margin-top:12px;display:none;white-space:pre-line;line-height:1.7}
+.status.success{background:var(--green-light);color:#1a6b3a;display:block}
+.status.error{background:var(--red-light);color:#8b2020;display:block}
+.status.loading{background:var(--blue-light);color:var(--blue-dark);display:block}
+
+#locked-overlay{
+  position:fixed;inset:0;background:rgba(30,58,79,0.85);
+  z-index:200;display:flex;align-items:center;justify-content:center;
+}
+.lock-box{
+  background:var(--white);border-radius:var(--radius);padding:32px 28px;
+  width:min(400px,90vw);box-shadow:0 8px 40px rgba(0,0,0,0.3);
+}
+.lock-box h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;text-align:center}
+.lock-box p{font-size:13px;color:var(--text2);text-align:center;margin-bottom:24px;line-height:1.6}
+.lock-error{color:var(--red);font-size:13px;text-align:center;margin-top:10px;min-height:20px}
+
+/* イベント一覧 */
+.event-list{list-style:none;margin-top:8px}
+.event-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;border-radius:8px;margin-bottom:8px;
+  background:#fff8f8;border:1px solid #f5c6c6;
+}
+.event-date{font-size:14px;font-weight:700;color:var(--tomato);min-width:90px}
+.event-title{font-size:14px;color:var(--text);flex:1}
+.event-desc{font-size:12px;color:var(--text3);margin-top:2px}
+.event-del{background:none;border:1px solid var(--red);color:var(--red);border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;white-space:nowrap}
+.event-del:hover{background:var(--red-light)}
+.event-empty{font-size:13px;color:var(--text3);padding:12px 0;text-align:center}
+
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e3a4f;color:#fff;padding:12px 22px;border-radius:10px;font-size:14px;transition:transform .3s;z-index:300;pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ロック画面 -->
+<div id="locked-overlay">
+  <div class="lock-box">
+    <div style="text-align:center;font-size:40px;margin-bottom:12px">📅</div>
+    <h2>区イベントカレンダー管理</h2>
+    <p>区担当者パスワードを入力してください。<br>このページは関係者専用です。</p>
+    <div class="form-group">
+      <input class="form-input" type="password" id="pw-input" placeholder="パスワード" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">ログイン</button>
+    <div class="lock-error" id="lock-error"></div>
+  </div>
+</div>
+
+<header>
+  <h1>📅 <span id="header-ku-name">区</span> イベントカレンダー管理</h1>
+  <span class="subtitle">区担当者専用ページ</span>
+</header>
+
+<main class="page">
+
+  <div class="card">
+    <div class="card-header sky">📋 ご案内</div>
+    <div class="card-body" style="font-size:13px;color:var(--text2);line-height:1.7">
+      区のイベント（清掃活動・行事など）をカレンダーに登録できます。<br>
+      登録したイベントは住民ページのカレンダーに<span style="color:var(--tomato);font-weight:700">赤色</span>で表示されます。<br>
+      過去のイベントは自動的に一覧から外れますが、カレンダー上には残ります。
+    </div>
+  </div>
+
+  <!-- イベント登録 -->
+  <div class="card">
+    <div class="card-header">➕ イベントを登録する</div>
+    <div class="card-body">
+      <div class="form-group">
+        <label class="form-label">日付</label>
+        <input class="form-input" type="date" id="ev-date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">イベント名</label>
+        <input class="form-input" type="text" id="ev-title" placeholder="例：地区清掃活動、夏祭り準備">
+      </div>
+      <div class="form-group">
+        <label class="form-label">メモ（任意）</label>
+        <input class="form-input" type="text" id="ev-desc" placeholder="例：集合場所：公民館前　8時開始">
+        <div class="form-hint">カレンダーのイベント詳細に表示されます。</div>
+      </div>
+      <!-- 編集時に使用する隠しフィールド -->
+      <input type="hidden" id="ev-edit-id" value="">
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" id="add-btn" onclick="doSaveEvent()" style="flex:1">📅 <span id="add-btn-label">登録する</span></button>
+        <button class="btn btn-ghost" id="cancel-edit-btn" onclick="cancelEdit()" style="display:none">✕ キャンセル</button>
+      </div>
+      <div class="status" id="add-status"></div>
+    </div>
+  </div>
+
+  <!-- 登録済みイベント一覧 -->
+  <div class="card">
+    <div class="card-header tomato">📋 登録済みイベント（今月以降）</div>
+    <div class="card-body">
+      <div id="event-list-wrap">
+        <div class="event-empty">読み込み中...</div>
+      </div>
+      <div class="status" id="del-status"></div>
+    </div>
+  </div>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+const GAS_URL  = "YOUR_UNIFIED_GAS_URL";
+const TIER     = "ward";
+const KU_CODE  = new URLSearchParams(location.search).get("ku") || "";
+
+let sessionPwHash = null;
+
+// ===== SHA-256 =====
+async function sha256(str){
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+
+// ===== ログイン =====
+async function doLogin(){
+  const pw  = document.getElementById("pw-input").value;
+  const err = document.getElementById("lock-error");
+  if(!pw){ err.textContent="パスワードを入力してください"; return; }
+  if(!KU_CODE){ err.textContent="URLに?ku=区コードが指定されていません"; return; }
+  err.textContent = "確認中...";
+  const hash = await sha256(pw);
+  try{
+    const res  = await fetch(GAS_URL+"?action=getWardEvents&tier="+TIER+"&ku="+KU_CODE+"&pwHash="+hash);
+    const data = await res.json();
+    if(!data.ok && data.error && data.error.includes("認証エラー")){
+      err.textContent = "パスワードが違います"; return;
+    }
+    sessionPwHash = hash;
+    document.getElementById("locked-overlay").style.display = "none";
+    loadKuName();
+    renderEvents(data.events || []);
+    // 今日の日付をデフォルトにセット
+    document.getElementById("ev-date").value = new Date().toISOString().slice(0,10);
+  }catch(e){
+    err.textContent = "通信エラーが発生しました";
+  }
+}
+document.getElementById("pw-input").addEventListener("keydown", e=>{ if(e.key==="Enter") doLogin(); });
+
+// ===== 区名取得 =====
+async function loadKuName(){
+  try{
+    const res  = await fetch(GAS_URL+"?action=getKuInfo&ku="+KU_CODE);
+    const data = await res.json();
+    if(data.ok && data.ku_name) document.getElementById("header-ku-name").textContent = data.ku_name;
+  }catch(e){}
+}
+
+// ===== イベント登録・更新（共通） =====
+async function doSaveEvent(){
+  const date    = document.getElementById("ev-date").value;
+  const title   = document.getElementById("ev-title").value.trim();
+  const desc    = document.getElementById("ev-desc").value.trim();
+  const editId  = document.getElementById("ev-edit-id").value;
+  const btn     = document.getElementById("add-btn");
+  const st      = document.getElementById("add-status");
+  const isEdit  = !!editId;
+
+  if(!date){  showStatus(st,"error","日付を選択してください"); return; }
+  if(!title){ showStatus(st,"error","イベント名を入力してください"); return; }
+
+  btn.disabled = true;
+  showStatus(st,"loading", isEdit ? "更新中..." : "登録中...");
+  try{
+    const params = new URLSearchParams({
+      action:      isEdit ? "updateWardEvent" : "addWardEvent",
+      tier:        TIER,
+      ku:          KU_CODE,
+      date,
+      title,
+      description: desc,
+      pwHash:      sessionPwHash,
+    });
+    if(isEdit) params.set("eventId", editId);
+
+    const res  = await fetch(GAS_URL, {method:"POST", body:params});
+    const data = await res.json();
+    if(data.ok){
+      showStatus(st,"success", isEdit ? "✅ 更新しました："+title : "✅ 登録しました："+title+"（"+date+"）");
+      clearForm();
+      showToast(isEdit ? "更新しました" : "登録しました");
+      await reloadEvents();
+    } else {
+      showStatus(st,"error","エラー："+data.error);
+      btn.disabled = false;
+    }
+  }catch(e){
+    showStatus(st,"error","通信エラー："+e.message);
+    btn.disabled = false;
+  }
+}
+
+// ===== 編集モードに切替 =====
+function startEdit(eventId, date, title, desc){
+  document.getElementById("ev-date").value    = date;
+  document.getElementById("ev-title").value   = title;
+  document.getElementById("ev-desc").value    = desc || "";
+  document.getElementById("ev-edit-id").value = eventId;
+  document.getElementById("add-btn-label").textContent = "✏️ 更新する";
+  document.getElementById("cancel-edit-btn").style.display = "inline-flex";
+  document.getElementById("add-status").className = "status";
+  document.getElementById("ev-date").scrollIntoView({behavior:"smooth", block:"center"});
+}
+
+// ===== 編集キャンセル =====
+function cancelEdit(){
+  clearForm();
+  document.getElementById("add-status").className = "status";
+}
+
+function clearForm(){
+  document.getElementById("ev-date").value    = new Date().toISOString().slice(0,10);
+  document.getElementById("ev-title").value   = "";
+  document.getElementById("ev-desc").value    = "";
+  document.getElementById("ev-edit-id").value = "";
+  document.getElementById("add-btn-label").textContent = "登録する";
+  document.getElementById("cancel-edit-btn").style.display = "none";
+  document.getElementById("add-btn").disabled = false;
+}
+
+// ===== イベント削除 =====
+async function doDeleteEvent(eventId, title, btn){
+  if(!confirm("「"+title+"」を削除しますか？")) return;
+  const st = document.getElementById("del-status");
+  btn.disabled = true;
+  showStatus(st,"loading","削除中...");
+  try{
+    const params = new URLSearchParams({
+      action:  "deleteWardEvent",
+      tier:    TIER,
+      ku:      KU_CODE,
+      eventId,
+      pwHash:  sessionPwHash,
+    });
+    const res  = await fetch(GAS_URL, {method:"POST", body:params});
+    const data = await res.json();
+    if(data.ok){
+      showStatus(st,"success","削除しました");
+      showToast("削除しました");
+      await reloadEvents();
+    } else {
+      showStatus(st,"error","エラー："+data.error);
+      btn.disabled = false;
+    }
+  }catch(e){
+    showStatus(st,"error","通信エラー："+e.message);
+    btn.disabled = false;
+  }
+}
+
+// ===== イベント再読み込み =====
+async function reloadEvents(){
+  try{
+    const res  = await fetch(GAS_URL+"?action=getWardEvents&tier="+TIER+"&ku="+KU_CODE+"&pwHash="+sessionPwHash);
+    const data = await res.json();
+    renderEvents(data.events || []);
+  }catch(e){}
+}
+
+// ===== イベント描画 =====
+function renderEvents(events){
+  const wrap = document.getElementById("event-list-wrap");
+  if(!events.length){
+    wrap.innerHTML = '<div class="event-empty">登録済みのイベントはありません</div>';
+    return;
+  }
+  // 今月以降のみ表示
+  const today = new Date().toISOString().slice(0,10);
+  const thisMonth = today.slice(0,7);
+  const filtered = events.filter(ev => ev.date >= thisMonth);
+  if(!filtered.length){
+    wrap.innerHTML = '<div class="event-empty">今月以降のイベントはありません</div>';
+    return;
+  }
+  const ul = document.createElement("ul");
+  ul.className = "event-list";
+  filtered.forEach(ev => {
+    const d    = ev.date.replace(/-/g,"/");
+    const past = ev.date < today ? ' style="opacity:.55"' : '';
+    const li   = document.createElement("li");
+    li.className = "event-item";
+    li.innerHTML = `
+      <div${past}>
+        <div class="event-date">📅 ${d}</div>
+        <div class="event-title">${escHtml(ev.title)}</div>
+        ${ev.description ? '<div class="event-desc">'+escHtml(ev.description)+'</div>' : ''}
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0">
+        <button class="event-del" style="border-color:var(--blue);color:var(--blue)" onclick="startEdit('${escHtml(ev.eventId)}','${escHtml(ev.date)}','${escHtml(ev.title)}','${escHtml(ev.description||'')}')">修正</button>
+        <button class="event-del" onclick="doDeleteEvent('${escHtml(ev.eventId)}','${escHtml(ev.title)}',this)">削除</button>
+      </div>`;
+    ul.appendChild(li);
+  });
+  wrap.innerHTML = "";
+  wrap.appendChild(ul);
+}
+
+function escHtml(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function showStatus(el,type,msg){ el.className="status "+type; el.textContent=msg; }
+function showToast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2400); }
+</script>
+</body>
+</html>
