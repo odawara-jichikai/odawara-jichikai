@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理画面（市担当者用）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif;background:#f0f7ff;color:#1e3a4f;min-height:100vh}
+
+:root{
+  --blue:#3a8fc7;--blue-dark:#1e6fa3;--blue-light:#e6f3fb;--blue-pale:#d0eaf9;
+  --green:#4caf82;--green-light:#e8f7ef;
+  --red:#e05c5c;--red-light:#fdeaea;
+  --amber:#f8bd68;--amber-light:#fff4e0;
+  --border:#c8dff0;--white:#fff;
+  --text:#1e3a4f;--text2:#4a6a80;--text3:#7a9ab0;
+  --shadow:0 2px 12px rgba(58,143,199,0.10);--radius:12px;
+}
+
+header{background:var(--blue);padding:0 20px;height:54px;display:flex;align-items:center;box-shadow:0 2px 8px rgba(30,111,163,0.2)}
+header h1{color:#fff;font-size:17px;font-weight:700}
+header .subtitle{color:rgba(255,255,255,0.75);font-size:12px;margin-left:12px}
+
+.page{max-width:720px;margin:0 auto;padding:24px 16px 60px}
+
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px}
+.card-header{padding:14px 18px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;background:var(--blue);color:#fff}
+.card-header.sky{background:var(--blue-light);color:var(--blue-dark);border-bottom:1px solid var(--blue-pale)}
+.card-body{padding:20px}
+
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:13px;font-weight:700;color:var(--text2);margin-bottom:6px}
+.form-input,.form-select{
+  width:100%;padding:11px 14px;font-size:15px;
+  border:1px solid var(--border);border-radius:8px;
+  background:var(--white);color:var(--text);
+  transition:border-color .2s;appearance:none;
+}
+.form-select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%233a8fc7' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;
+}
+.form-input:focus,.form-select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(58,143,199,0.12)}
+.form-hint{font-size:12px;color:var(--text3);margin-top:6px;line-height:1.5}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#c04444}
+.btn-ghost{background:var(--blue-light);color:var(--blue-dark);border:1px solid var(--blue-pale)}
+.btn-ghost:hover{background:var(--blue-pale)}
+.btn-sm{padding:7px 14px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-full{width:100%}
+
+.status{padding:10px 14px;border-radius:8px;font-size:13px;margin-top:12px;display:none;white-space:pre-line;line-height:1.6}
+.status.success{background:var(--green-light);color:#1a6b3a;display:block}
+.status.error{background:var(--red-light);color:#8b2020;display:block}
+.status.loading{background:var(--blue-light);color:var(--blue-dark);display:block}
+
+#locked-overlay{
+  position:fixed;inset:0;background:rgba(30,58,79,0.85);
+  z-index:200;display:flex;align-items:center;justify-content:center;
+}
+.lock-box{
+  background:var(--white);border-radius:var(--radius);padding:32px 28px;
+  width:min(400px,90vw);box-shadow:0 8px 40px rgba(0,0,0,0.3);
+}
+.lock-box h2{font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;text-align:center}
+.lock-box p{font-size:13px;color:var(--text2);text-align:center;margin-bottom:24px;line-height:1.6}
+.lock-error{color:var(--red);font-size:13px;text-align:center;margin-top:10px;min-height:20px}
+
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e3a4f;color:#fff;padding:12px 22px;border-radius:10px;font-size:14px;transition:transform .3s;z-index:300;pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+/* タブ切り替え */
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--blue-light);padding:6px;border-radius:10px}
+.tab{flex:1;text-align:center;padding:10px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;color:var(--text2);transition:all .2s}
+.tab.active{background:var(--white);color:var(--blue-dark);box-shadow:0 1px 6px rgba(30,111,163,0.12)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* 区一覧テーブル */
+.ward-list{list-style:none}
+.ward-item{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:12px 4px;border-bottom:1px solid var(--border);font-size:14px;
+}
+.ward-item:last-child{border-bottom:none}
+.ward-item .wi-code{font-weight:700;color:var(--text);width:48px;flex-shrink:0}
+.ward-item .wi-name{flex:1;min-width:120px;color:var(--text)}
+.ward-item .wi-badge{
+  font-size:11px;padding:3px 9px;border-radius:12px;font-weight:700;
+}
+.wi-badge.ok{background:var(--green-light);color:#1a6b3a}
+.wi-badge.warn{background:var(--amber-light);color:#8a5a10}
+.ward-item .wi-date{font-size:11px;color:var(--text3);width:100%;margin-top:2px}
+
+/* 発行結果表示 */
+.result-box{
+  background:var(--green-light);border-radius:10px;padding:18px;margin-top:14px;display:none;
+}
+.result-box.show{display:block}
+.result-box .rt{font-size:14px;font-weight:700;color:#1a6b3a;margin-bottom:10px}
+.result-box .rd{display:flex;gap:10px;align-items:center;margin-bottom:6px;font-size:14px}
+.result-box .rd .rl{width:90px;color:var(--text2);flex-shrink:0}
+.result-box .rd .rv{font-weight:700;color:var(--text);font-family:monospace;font-size:16px;letter-spacing:.05em}
+.result-box .rn{font-size:12px;color:var(--text3);margin-top:10px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- ロック画面 -->
+<div id="locked-overlay">
+  <div class="lock-box">
+    <div style="text-align:center;font-size:40px;margin-bottom:12px">🔐</div>
+    <h2>区管理画面</h2>
+    <p>市担当者パスワードを入力してください。<br>このページは市担当者専用です。</p>
+    <div class="form-group">
+      <input class="form-input" type="password" id="pw-input" placeholder="パスワード" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">ログイン</button>
+    <div class="lock-error" id="lock-error"></div>
+  </div>
+</div>
+
+<header>
+  <h1>🗂️ 管理画面</h1>
+  <span class="subtitle">市担当者専用：初期パスワード発行・初期化</span>
+</header>
+
+<main class="page">
+
+  <!-- 問い合わせ先（PDF案内用紙に印字） -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-header sky">📞 案内用紙の問い合わせ先（PDF出力時に印字されます）</div>
+    <div class="card-body" style="display:flex;gap:12px;flex-wrap:wrap">
+      <div class="form-group" style="flex:1;min-width:200px;margin-bottom:0">
+        <label class="form-label">問い合わせ先名称</label>
+        <input class="form-input" type="text" id="contact-name" placeholder="例：小田原市自治会総連合" oninput="saveContact()">
+      </div>
+      <div class="form-group" style="flex:1;min-width:200px;margin-bottom:0">
+        <label class="form-label">電話番号 / メールアドレス等</label>
+        <input class="form-input" type="text" id="contact-info" placeholder="例：0465-XX-XXXX" oninput="saveContact()">
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('ward')">📦 区管理</div>
+    <div class="tab" onclick="switchTab('district')">🏘️ 地区管理</div>
+    <div class="tab" onclick="switchTab('cache')">🗂️ キャッシュ管理</div>
+  </div>
+
+  <!-- ===== 区管理タブ ===== -->
+  <div class="tab-panel active" id="tab-ward">
+
+  <div class="card">
+    <div class="card-header sky">📋 ご案内（区）</div>
+    <div class="card-body" style="font-size:13px;color:var(--text2);line-height:1.7">
+      この画面で発行した「区コード」と「初期パスワード」を、該当の区担当者に紙等でお渡しください。
+      担当者はその情報を使って、本登録ページ（register.html）から自分専用のパスワードを設定します。<br><br>
+      すでに登録済みの区に対してもう一度発行すると、その区のパスワードが新しい初期パスワードに
+      置き換わります（担当者交代時の引き継ぎや、パスワードを忘れた場合の対応に使えます）。
+      PDFフォルダの中身が削除されることはありません。<br><br>
+      ※「パスワード設定済み」は、発行した初期パスワードのままか、担当者が本登録を済ませた
+      正規パスワードかを区別していません。担当者から「ログインできた」と確認が取れていれば、
+      本登録は完了していると判断してください。
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">🔑 初期パスワードを発行する（区）</div>
+    <div class="card-body">
+      <div class="form-group">
+        <label class="form-label">区コード</label>
+        <input class="form-input" type="text" id="ward-ku-code" placeholder="例：61　（1〜2桁でも自動的に061の形になります）" inputmode="numeric">
+        <div class="form-hint">登録済みの区コードを入力すると「初期化（差し戻し）」、未登録なら「新規登録」になります。</div>
+      </div>
+      <div class="form-group" id="ward-new-fields" style="display:none">
+        <label class="form-label">区名称（新規登録の場合のみ必須）</label>
+        <input class="form-input" type="text" id="ward-ku-name" placeholder="例：第61区自治会">
+      </div>
+      <div class="form-group">
+        <label class="form-label">初期パスワード</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="form-input" type="text" id="ward-pw-input" placeholder="自動生成後に変更可" autocomplete="off" style="font-family:monospace;letter-spacing:.05em">
+          <button class="btn btn-ghost btn-sm" onclick="generateWardPw()" style="white-space:nowrap;flex-shrink:0">🔄 再生成</button>
+        </div>
+        <div class="form-hint" id="ward-pw-hint" style="color:var(--text3)"></div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="issueWardPassword()">この内容で初期パスワードを発行する</button>
+      <div class="status" id="ward-issue-status"></div>
+      <div class="result-box" id="ward-result-box">
+        <div class="rt">✅ 初期パスワードを発行しました（区）</div>
+        <div class="rd"><span class="rl">区コード</span><span class="rv" id="ward-result-code"></span></div>
+        <div class="rd"><span class="rl">区名称</span><span class="rv" id="ward-result-name" style="font-family:inherit;font-size:14px"></span></div>
+        <div class="rd"><span class="rl">初期パスワード</span><span class="rv" id="ward-result-pw"></span></div>
+        <div class="rn">この内容を紙等に控えて、区担当者にお渡しください。画面を閉じると再表示できません。</div>
+        <div style="margin-top:14px">
+          <button class="btn btn-primary btn-full" onclick="generateHandoutPdf('ward')">📄 案内用紙を出力（PDF）</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header sky">📑 登録済みの区一覧</div>
+    <div class="card-body">
+      <button class="btn btn-ghost btn-sm" onclick="loadWardList()">🔄 一覧を更新</button>
+      <ul class="ward-list" id="ward-list" style="margin-top:14px"></ul>
+    </div>
+  </div>
+
+  </div><!-- /tab-ward -->
+
+  <!-- ===== 地区管理タブ ===== -->
+  <div class="tab-panel" id="tab-district">
+
+  <div class="card">
+    <div class="card-header sky">📋 ご案内（地区）</div>
+    <div class="card-body" style="font-size:13px;color:var(--text2);line-height:1.7">
+      この画面で発行した「地区コード」と「初期パスワード」を、該当の地区担当者に紙等でお渡しください。
+      担当者はその情報を使って、本登録ページ（register.html）から自分専用のパスワードを設定します。<br><br>
+      地区コードは半角英字（例：ashigara）で入力してください。
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">🔑 初期パスワードを発行する（地区）</div>
+    <div class="card-body">
+      <div class="form-group">
+        <label class="form-label">地区コード（半角英字）</label>
+        <input class="form-input" type="text" id="dist-code" placeholder="例：ashigara" autocomplete="off">
+        <div class="form-hint">登録済みの地区コードを入力すると「初期化（差し戻し）」、未登録なら「新規登録」になります。</div>
+      </div>
+      <div class="form-group" id="dist-new-fields" style="display:none">
+        <label class="form-label">地区名称（新規登録の場合のみ必須）</label>
+        <input class="form-input" type="text" id="dist-name" placeholder="例：足柄地区">
+      </div>
+      <div class="form-group">
+        <label class="form-label">初期パスワード</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="form-input" type="text" id="dist-pw-input" placeholder="自動生成後に変更可" autocomplete="off" style="font-family:monospace;letter-spacing:.05em">
+          <button class="btn btn-ghost btn-sm" onclick="generateDistPw()" style="white-space:nowrap;flex-shrink:0">🔄 再生成</button>
+        </div>
+        <div class="form-hint" id="dist-pw-hint" style="color:var(--text3)"></div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="issueDistrictPassword()">この内容で初期パスワードを発行する</button>
+      <div class="status" id="dist-issue-status"></div>
+      <div class="result-box" id="dist-result-box">
+        <div class="rt">✅ 初期パスワードを発行しました（地区）</div>
+        <div class="rd"><span class="rl">地区コード</span><span class="rv" id="dist-result-code"></span></div>
+        <div class="rd"><span class="rl">地区名称</span><span class="rv" id="dist-result-name" style="font-family:inherit;font-size:14px"></span></div>
+        <div class="rd"><span class="rl">初期パスワード</span><span class="rv" id="dist-result-pw"></span></div>
+        <div class="rn">この内容を紙等に控えて、地区担当者にお渡しください。画面を閉じると再表示できません。</div>
+        <div style="margin-top:14px">
+          <button class="btn btn-primary btn-full" onclick="generateHandoutPdf('district')">📄 案内用紙を出力（PDF）</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header sky">📑 登録済みの地区一覧</div>
+    <div class="card-body">
+      <button class="btn btn-ghost btn-sm" onclick="loadDistrictList()">🔄 一覧を更新</button>
+      <ul class="ward-list" id="dist-list" style="margin-top:14px"></ul>
+    </div>
+  </div>
+
+  </div><!-- /tab-district -->
+
+  <!-- ===== キャッシュ管理タブ ===== -->
+  <div class="tab-panel" id="tab-cache">
+
+  <div class="card">
+    <div class="card-header sky">📋 ご案内</div>
+    <div class="card-body" style="font-size:13px;color:var(--text2);line-height:1.7">
+      PDFキャッシュの使用状況を確認できます。<br>
+      各フォルダのJSONキャッシュが上限（50,000文字）の90%（45,000文字）を超えると
+      <span style="color:var(--red);font-weight:700">⚠️ 警告</span>が表示されます。<br>
+      警告が出た場合は、該当フォルダの古いPDFを削除して容量を確保してください。
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">🗂️ キャッシュ使用状況</div>
+    <div class="card-body">
+      <button class="btn btn-primary" onclick="loadCacheCapacity()" id="cache-load-btn">
+        🔄 キャッシュ状況を確認する
+      </button>
+      <div class="status" id="cache-status"></div>
+      <div id="cache-list" style="margin-top:14px"></div>
+    </div>
+  </div>
+
+  </div><!-- /tab-cache -->
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+// ===== 設定 =====
+const GAS_URL = "YOUR_UNIFIED_GAS_URL"; // ← unified_gas.js のデプロイURLに書き換える
+const TIER    = "city";
+
+let sessionPwHash  = null;
+let currentWards   = [];
+let currentDistricts = [];
+
+// ===== SHA-256ハッシュ生成 =====
+async function sha256(str){
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+
+// ===== タブ切り替え =====
+function switchTab(name){
+  document.querySelectorAll(".tab").forEach((t,i)=>{
+    const names = ["ward","district","cache"];
+    t.classList.toggle("active", names[i]===name);
+    document.querySelectorAll(".tab-panel")[i].classList.toggle("active", names[i]===name);
+  });
+  if(name==="district" && currentDistricts.length===0 && sessionPwHash) loadDistrictList();
+}
+
+// ===== キャッシュ容量確認 =====
+async function loadCacheCapacity(){
+  const statusEl = document.getElementById("cache-status");
+  const listEl   = document.getElementById("cache-list");
+  const btn      = document.getElementById("cache-load-btn");
+  btn.disabled = true;
+  showStatus(statusEl,"loading","確認中...");
+  listEl.innerHTML = "";
+
+  try{
+    const res  = await fetch(GAS_URL+"?action=checkCacheCapacity&tier="+TIER+"&pwHash="+sessionPwHash);
+    const data = await res.json();
+    if(!data.ok){ showStatus(statusEl,"error","エラー："+data.error); return; }
+
+    if(!data.items || data.items.length===0){
+      showStatus(statusEl,"success","キャッシュデータがありません。PDFをアップロードすると自動的に作成されます。");
+      return;
+    }
+
+    statusEl.className = "status";
+    const typeLabel = { city:"市", district:"地区", ward:"区" };
+    const rows = data.items.map(item=>{
+      const pct     = Math.round(item.jsonLen / 50000 * 100);
+      const barColor = item.warning ? "#e05c5c" : (pct > 70 ? "#f8bd68" : "#4caf82");
+      const warn    = item.warning
+        ? `<div style="color:#e05c5c;font-weight:700;font-size:12px;margin-top:4px">⚠️ 上限に近づいています。過去のPDFを整理してください。</div>`
+        : "";
+      const csBadge = item.inCacheService
+        ? `<span style="font-size:11px;background:#e8f7ef;color:#1a6b3a;border-radius:4px;padding:1px 6px;margin-left:6px">⚡ 高速キャッシュ有効</span>`
+        : `<span style="font-size:11px;background:#f0f7ff;color:#4a6a80;border-radius:4px;padding:1px 6px;margin-left:6px">📋 スプレッドシートから取得</span>`;
+      return `
+        <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-weight:700;font-size:14px">${typeLabel[item.type]||item.type}：${item.code}${csBadge}</span>
+            <span style="font-size:12px;color:var(--text2)">${item.jsonLen.toLocaleString()} / 50,000文字（${pct}%）</span>
+          </div>
+          <div style="background:#e0eef7;border-radius:4px;height:8px;overflow:hidden">
+            <div style="background:${barColor};height:100%;width:${Math.min(pct,100)}%;transition:width .3s"></div>
+          </div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px">最終更新：${item.updatedAt}</div>
+          ${warn}
+        </div>`;
+    }).join("");
+    listEl.innerHTML = `<div style="border-top:1px solid var(--border)">${rows}</div>`;
+  }catch(e){
+    showStatus(statusEl,"error","通信エラー："+e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ===== ログイン =====
+async function doLogin(){
+  const pw  = document.getElementById("pw-input").value;
+  const err = document.getElementById("lock-error");
+  if(!pw){ err.textContent="パスワードを入力してください"; return; }
+  err.textContent = "確認中...";
+  const hash = await sha256(pw);
+  try{
+    const res  = await fetch(GAS_URL+"?action=getWardList&tier="+TIER+"&pwHash="+hash);
+    const data = await res.json();
+    if(!data.ok && data.error && data.error.includes("認証エラー")){
+      err.textContent = "パスワードが違います"; return;
+    }
+    if(!data.ok){ err.textContent = "エラー："+data.error; return; }
+    sessionPwHash = hash;
+    document.getElementById("locked-overlay").style.display = "none";
+    err.textContent = "";
+    renderWardList(data.wards);
+    generateWardPw();   // 区タブの初期パスワードを自動生成して表示
+    generateDistPw();   // 地区タブの初期パスワードを自動生成して表示
+  }catch(e){
+    err.textContent = "通信エラーが発生しました";
+  }
+}
+document.getElementById("pw-input").addEventListener("keydown", e=>{ if(e.key==="Enter") doLogin(); });
+
+// ===== パスワード強度チェック =====
+const WEAK_PATTERNS = [
+  /^(.)\1+$/,           // 同じ文字の繰り返し（aaaa等）
+  /^(01|12|23|34|45|56|67|78|89|90|0123|1234|2345|3456|4567|5678|6789)/i, // 連番
+  /^(password|pass|admin|1234|abcd|qwerty|letmein)/i,
+];
+function checkPasswordStrength(pw){
+  if(!pw || pw.length < 4) return { ok:false, msg:"4文字以上で入力してください" };
+  if(pw.length < 6) return { ok:true, msg:"⚠️ 短いパスワードです。6文字以上を推奨します", warn:true };
+  for(const re of WEAK_PATTERNS){
+    if(re.test(pw)) return { ok:true, msg:"⚠️ 簡単すぎるパスワードです。別のものを推奨します", warn:true };
+  }
+  return { ok:true, msg:"✅ 問題ありません", warn:false };
+}
+
+// ===== 区：パスワード自動生成 =====
+const CHARS = "23456789ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz";
+function genRandom(len){
+  let pw="";
+  const arr = new Uint8Array(len);
+  crypto.getRandomValues(arr);
+  arr.forEach(v=>{ pw += CHARS[v % CHARS.length]; });
+  return pw;
+}
+function generateWardPw(){
+  const pw = genRandom(8);
+  document.getElementById("ward-pw-input").value = pw;
+  updateWardPwHint();
+}
+document.addEventListener("DOMContentLoaded", ()=>{
+  document.getElementById("ward-pw-input").addEventListener("input", updateWardPwHint);
+  document.getElementById("dist-pw-input").addEventListener("input", updateDistPwHint);
+  document.getElementById("ward-ku-code").addEventListener("input", ()=>{
+    const code = normalizeKuCodeFront(document.getElementById("ward-ku-code").value);
+    document.getElementById("ward-new-fields").style.display =
+      (code && !currentWards.some(w=>w.kuCode===code)) ? "block" : "none";
+  });
+  document.getElementById("dist-code").addEventListener("input", ()=>{
+    const code = document.getElementById("dist-code").value.trim().toLowerCase();
+    document.getElementById("dist-new-fields").style.display =
+      (code && !currentDistricts.some(d=>d.districtCode===code)) ? "block" : "none";
+  });
+});
+function updateWardPwHint(){
+  const r = checkPasswordStrength(document.getElementById("ward-pw-input").value);
+  const hint = document.getElementById("ward-pw-hint");
+  hint.textContent = r.msg || "";
+  hint.style.color = r.warn ? "#c97f0a" : (r.ok ? "#1a6b3a" : "#8b2020");
+}
+function generateDistPw(){
+  const pw = genRandom(8);
+  document.getElementById("dist-pw-input").value = pw;
+  updateDistPwHint();
+}
+function updateDistPwHint(){
+  const r = checkPasswordStrength(document.getElementById("dist-pw-input").value);
+  const hint = document.getElementById("dist-pw-hint");
+  hint.textContent = r.msg || "";
+  hint.style.color = r.warn ? "#c97f0a" : (r.ok ? "#1a6b3a" : "#8b2020");
+}
+
+// ===== 区コード正規化（フロント側） =====
+function normalizeKuCodeFront(v){
+  const digits = String(v||"").trim().replace(/[^0-9]/g,"");
+  if(!digits) return "";
+  return digits.padStart(3,"0");
+}
+
+// ===== 区：初期パスワード発行 =====
+async function issueWardPassword(){
+  const kuCodeRaw = document.getElementById("ward-ku-code").value.trim();
+  const kuName    = document.getElementById("ward-ku-name").value.trim();
+  const pw        = document.getElementById("ward-pw-input").value.trim();
+  const statusEl  = document.getElementById("ward-issue-status");
+  const resultBox = document.getElementById("ward-result-box");
+
+  if(!kuCodeRaw){ showStatus(statusEl,"error","区コードを入力してください"); return; }
+  const strength = checkPasswordStrength(pw);
+  if(!strength.ok){ showStatus(statusEl,"error",strength.msg); return; }
+
+  resultBox.classList.remove("show");
+  showStatus(statusEl,"loading","発行中...");
+  try{
+    const params = new URLSearchParams({
+      action:"issueWardInitialPassword", tier:TIER, kuCode:kuCodeRaw,
+      kuName, customPassword:pw, pwHash:sessionPwHash,
+    });
+    const res  = await fetch(GAS_URL, {method:"POST", body:params});
+    const data = await res.json();
+    if(data.ok){
+      showStatus(statusEl,"success", data.isNew ? "新規登録し、初期パスワードを発行しました" : "初期パスワードを再発行しました（差し戻し）");
+      document.getElementById("ward-result-code").textContent = data.kuCode;
+      document.getElementById("ward-result-name").textContent = data.kuName || "（未設定）";
+      document.getElementById("ward-result-pw").textContent   = data.initialPassword;
+      resultBox.classList.add("show");
+      document.getElementById("ward-ku-code").value = "";
+      document.getElementById("ward-ku-name").value = "";
+      document.getElementById("ward-new-fields").style.display = "none";
+      generateWardPw();
+      loadWardList();
+    }else{
+      showStatus(statusEl,"error","エラー："+data.error);
+    }
+  }catch(e){
+    showStatus(statusEl,"error","通信エラー："+e.message);
+  }
+}
+
+// ===== 区：一覧取得・表示 =====
+async function loadWardList(){
+  const listEl = document.getElementById("ward-list");
+  listEl.innerHTML = "読み込み中...";
+  try{
+    const res  = await fetch(GAS_URL+"?action=getWardList&tier="+TIER+"&pwHash="+sessionPwHash);
+    const data = await res.json();
+    if(!data.ok){ listEl.innerHTML = "エラー："+escHtml(data.error); return; }
+    renderWardList(data.wards);
+  }catch(e){ listEl.innerHTML = "通信エラー"; }
+}
+function renderWardList(wards){
+  currentWards = wards || [];
+  const listEl = document.getElementById("ward-list");
+  if(!currentWards.length){ listEl.innerHTML = "登録されている区がありません"; return; }
+  listEl.innerHTML = currentWards.map(w=>`
+    <li class="ward-item">
+      <span class="wi-code">${escHtml(w.kuCode)}</span>
+      <span class="wi-name">${escHtml(w.kuName||"（名称未設定）")}</span>
+      <span class="wi-badge ${w.hasPw?'ok':'warn'}">${w.hasPw?'パスワード設定済み':'パスワード未設定'}</span>
+      <span class="wi-badge ${w.hasFolder?'ok':'warn'}">${w.hasFolder?'フォルダ作成済み':'フォルダ未作成'}</span>
+      ${w.updatedAt?`<span class="wi-date">最終更新：${escHtml(w.updatedAt)}</span>`:""}
+    </li>`).join("");
+}
+
+// ===== 地区：初期パスワード発行 =====
+async function issueDistrictPassword(){
+  const districtCode = document.getElementById("dist-code").value.trim().toLowerCase();
+  const districtName = document.getElementById("dist-name").value.trim();
+  const pw           = document.getElementById("dist-pw-input").value.trim();
+  const statusEl     = document.getElementById("dist-issue-status");
+  const resultBox    = document.getElementById("dist-result-box");
+
+  if(!districtCode){ showStatus(statusEl,"error","地区コードを入力してください"); return; }
+  const strength = checkPasswordStrength(pw);
+  if(!strength.ok){ showStatus(statusEl,"error",strength.msg); return; }
+
+  resultBox.classList.remove("show");
+  showStatus(statusEl,"loading","発行中...");
+  try{
+    const params = new URLSearchParams({
+      action:"issueDistrictInitialPassword", tier:TIER, districtCode,
+      districtName, customPassword:pw, pwHash:sessionPwHash,
+    });
+    const res  = await fetch(GAS_URL, {method:"POST", body:params});
+    const data = await res.json();
+    if(data.ok){
+      showStatus(statusEl,"success", data.isNew ? "新規登録し、初期パスワードを発行しました" : "初期パスワードを再発行しました（差し戻し）");
+      document.getElementById("dist-result-code").textContent = data.districtCode;
+      document.getElementById("dist-result-name").textContent = data.districtName || "（未設定）";
+      document.getElementById("dist-result-pw").textContent   = data.initialPassword;
+      resultBox.classList.add("show");
+      document.getElementById("dist-code").value = "";
+      document.getElementById("dist-name").value = "";
+      document.getElementById("dist-new-fields").style.display = "none";
+      generateDistPw();
+      loadDistrictList();
+    }else{
+      showStatus(statusEl,"error","エラー："+data.error);
+    }
+  }catch(e){
+    showStatus(statusEl,"error","通信エラー："+e.message);
+  }
+}
+
+// ===== 地区：一覧取得・表示 =====
+async function loadDistrictList(){
+  const listEl = document.getElementById("dist-list");
+  listEl.innerHTML = "読み込み中...";
+  try{
+    const res  = await fetch(GAS_URL+"?action=getDistrictList&tier="+TIER+"&pwHash="+sessionPwHash);
+    const data = await res.json();
+    if(!data.ok){ listEl.innerHTML = "エラー："+escHtml(data.error); return; }
+    renderDistrictList(data.districts);
+  }catch(e){ listEl.innerHTML = "通信エラー"; }
+}
+function renderDistrictList(districts){
+  currentDistricts = districts || [];
+  const listEl = document.getElementById("dist-list");
+  if(!currentDistricts.length){ listEl.innerHTML = "登録されている地区がありません"; return; }
+  listEl.innerHTML = currentDistricts.map(d=>`
+    <li class="ward-item">
+      <span class="wi-code" style="width:90px">${escHtml(d.districtCode)}</span>
+      <span class="wi-name">${escHtml(d.districtName||"（名称未設定）")}</span>
+      <span class="wi-badge ${d.hasPw?'ok':'warn'}">${d.hasPw?'パスワード設定済み':'パスワード未設定'}</span>
+      <span class="wi-badge ${d.hasFolder?'ok':'warn'}">${d.hasFolder?'フォルダ作成済み':'フォルダ未作成'}</span>
+      ${d.updatedAt?`<span class="wi-date">最終更新：${escHtml(d.updatedAt)}</span>`:""}
+    </li>`).join("");
+}
+
+// ===== 共通ヘルパー =====
+// ===== 問い合わせ先の保存・復元 =====
+function saveContact(){
+  sessionStorage.setItem("contact_name", document.getElementById("contact-name").value);
+  sessionStorage.setItem("contact_info", document.getElementById("contact-info").value);
+}
+function loadContact(){
+  var n = sessionStorage.getItem("contact_name");
+  var i = sessionStorage.getItem("contact_info");
+  if(n) document.getElementById("contact-name").value = n;
+  if(i) document.getElementById("contact-info").value = i;
+}
+window.addEventListener("DOMContentLoaded", loadContact);
+
+// ===== 案内用紙生成（印刷ウィンドウ） =====
+async function generateHandoutPdf(type){
+  var BASE_URL = "https://odawara-jichikai.github.io/odawara-jichikai/";
+  var name,code,pw;
+  if(type==="ward"){
+    name=document.getElementById("ward-result-name").textContent;
+    code=document.getElementById("ward-result-code").textContent;
+    pw  =document.getElementById("ward-result-pw").textContent;
+  }else{
+    name=document.getElementById("dist-result-name").textContent;
+    code=document.getElementById("dist-result-code").textContent;
+    pw  =document.getElementById("dist-result-pw").textContent;
+  }
+  if(!code||!pw){alert("先に初期パスワードを発行してください");return;}
+
+  var isWard    = type==="ward";
+  var typeName  = isWard?"区":"地区";
+  var portalUrl = BASE_URL+(isWard?"index.html?ku="+code:"index.html?district="+code);
+  var regUrl    = BASE_URL+"register.html";
+  var uploadUrl = BASE_URL+(isWard?"upload-ku.html?ku="+code:"upload-district.html?district="+code);
+  var heroUrl   = isWard ? BASE_URL+"hero.html?ku="+code : null;
+  var calUrl    = isWard
+    ? BASE_URL+"calendar-ward.html?ku="+code
+    : BASE_URL+"calendar-district.html?district="+code;
+  var contactName = document.getElementById("contact-name").value||"小田原市自治会総連合";
+  var contactInfo = document.getElementById("contact-info").value||"";
+
+  function makeQR(url){
+    return new Promise(function(resolve){
+      var div=document.createElement("div");
+      div.style.cssText="position:absolute;left:-9999px;top:-9999px";
+      document.body.appendChild(div);
+      new QRCode(div,{text:url,width:120,height:120,correctLevel:QRCode.CorrectLevel.M});
+      setTimeout(function(){
+        var canvas=div.querySelector("canvas");
+        var img=canvas?canvas.toDataURL("image/png"):"";
+        document.body.removeChild(div);
+        resolve(img);
+      },400);
+    });
+  }
+
+  function eH(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+  var urls=[portalUrl,regUrl,uploadUrl,calUrl];
+  if(heroUrl) urls.push(heroUrl);
+  var qrs=await Promise.all(urls.map(makeQR));
+  var qrPortal=qrs[0],qrReg=qrs[1],qrUpload=qrs[2],qrCal=qrs[3],qrHero=heroUrl?qrs[4]:"";
+
+  function sec(icon,title,url,qrSrc,desc){
+    return '<div class="section"><div class="sec-header">'+icon+' '+eH(title)+'</div>'
+      +'<div class="sec-body"><div class="row-qr"><div class="info">'
+      +'<div class="url">'+eH(url)+'</div>'
+      +'<div class="desc">'+desc+'</div></div>'
+      +'<div class="qr-wrap"><img src="'+qrSrc+'" alt="QR"><div class="qr-label">スマホで読み取り</div></div>'
+      +'</div></div></div>';
+  }
+
+  var cols = sec("\uD83D\uDD11","パスワードの設定・変更",regUrl,qrReg,
+      "初回ログイン時に初期パスワードから<br>ご自身のパスワードへ変更してください。<br>担当者交代時も同様に変更します。")
+    + sec("\uD83D\uDCC4","PDFのアップロード・削除",uploadUrl,qrUpload,
+      "回覧板等のPDFを登録します（上限"+(isWard?"10MB":"20MB")+"）。<br>当年度・前年度分を目安に保管し、<br>古いPDFは定期的に削除してください。");
+
+  if(isWard){
+    cols += sec("\uD83D\uDDBC","見出し画像の登録（区のみ）",heroUrl,qrHero,
+        "住民ページ上部の看板画像を登録します。<br>横長画像（1200×300px推奨）が適しています。<br>必須ではありません。");
+    cols += sec("\uD83D\uDCC5","区のイベントカレンダー（区のみ）",calUrl,qrCal,
+        "清掃・行事などのイベントを登録できます。<br>登録内容は住民ページのカレンダーに<br>赤色で反映されます。");
+  }else{
+    cols += sec("\uD83D\uDDD1","ごみと資源の収集日カレンダー（地区のみ）",calUrl,qrCal,
+        "ごみ収集ルールを入力するとカレンダーを<br>自動生成します（1ヶ月あたり約30秒）。<br>生成後は必ず内容を確認してください。");
+  }
+  cols += sec("\uD83C\uDFE0","ポータルサイト（住民向けページ）",portalUrl,qrPortal,
+      "住民が閲覧するページです。<br>アップロード後の確認にご利用ください。<br>ホーム画面に追加すると便利です。");
+
+  var css = "@page{size:A4;margin:11mm 14mm}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif;color:#1a2a3a;font-size:9pt;line-height:1.45}.cover{text-align:center;padding:4mm 0 4mm;border-bottom:3px solid #2a6db5;margin-bottom:4mm}.badge{display:inline-block;background:#2a6db5;color:#fff;font-size:8pt;padding:1px 10px;border-radius:10px;margin-bottom:1.5mm}.cover h1{font-size:17pt;font-weight:900;color:#1a4a8a;margin-bottom:1.5mm}.cover .sub{font-size:9.5pt;color:#3a6090;margin-bottom:2.5mm}.name-box{display:inline-block;background:#e8f2fb;border:2px solid #2a6db5;border-radius:8px;padding:1.5mm 7mm;font-size:12pt;font-weight:700;color:#1a4a8a}.pw-box{background:#fff8e0;border:2px solid #f0b030;border-radius:8px;padding:2.5mm 4mm;margin:2.5mm 0 2.5mm;display:flex;align-items:center;gap:4mm}.pw-label{font-size:8pt;color:#7a5500;font-weight:700;white-space:nowrap}.pw-value{font-size:19pt;font-weight:900;color:#7a3a00;letter-spacing:.12em;flex:1}.warn-box{background:#fff0f0;border-left:4px solid #e84040;padding:1.5mm 3mm;margin-bottom:3mm;font-size:8pt;color:#8b1a1a}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2.5mm}.section{page-break-inside:avoid;margin-bottom:2.5mm}.sec-header{background:#2a6db5;color:#fff;padding:1.2mm 3mm;border-radius:4px 4px 0 0;font-size:8.5pt;font-weight:700}.sec-body{border:1px solid #b0cce8;border-top:none;border-radius:0 0 4px 4px;padding:2mm 3mm;background:#f8fbff}.url{font-size:7pt;color:#1a5a9a;font-family:monospace;background:#e4eef8;padding:0.8mm 2mm;border-radius:3px;margin:0.8mm 0 1.2mm;word-break:break-all}.desc{font-size:8pt;color:#3a5a70;line-height:1.5}.row-qr{display:flex;align-items:flex-start;gap:2.5mm}.info{flex:1}.qr-wrap{text-align:center;min-width:20mm}.qr-wrap img{width:20mm;height:20mm;border:1px solid #ccc;display:block}.qr-label{font-size:6pt;color:#667;margin-top:0.5mm}.footer{margin-top:3mm;padding-top:2mm;border-top:1px solid #b0c8e0;font-size:7.5pt;color:#4a6070;display:flex;gap:4mm;align-items:center}";
+
+  var html = "<!DOCTYPE html><html lang='ja'><head><meta charset='UTF-8'><title>担当者案内</title><style>"+css+"</style></head><body>"
+    +"<div class='cover'><div class='badge'>"+eH(typeName)+"担当者 専用</div>"
+    +"<h1>おだわら回覧板・ぷらす</h1>"
+    +"<div class='sub'>担当者向け 操作案内</div>"
+    +"<div class='name-box'>"+eH(name)+"（"+eH(typeName)+"コード："+eH(code)+"）</div></div>"
+    +"<div class='pw-box'><div><div class='pw-label'>初期パスワード</div><div class='pw-value'>"+eH(pw)+"</div></div></div>"
+    +"<div class='warn-box'>&#9888; <strong>初期パスワードは早めに変更してください。</strong>担当者交代のタイミングでの変更も推奨します。</div>"
+    +"<div class='two-col'>"+cols+"</div>"
+    +"<div class='footer'><span>【お問い合わせ】</span><strong>"+eH(contactName)+"</strong><span>"+eH(contactInfo)+"</span></div>"
+    +"<script>window.onload=function(){window.print();}<\/script>"
+    +"</body></html>";
+
+  var win=window.open("","_blank","width=900,height=700");
+  if(!win){alert("ポップアップがブロックされています。ブラウザの設定でポップアップを許可してください。");return;}
+  win.document.write(html);
+  win.document.close();
+}
+
+function escHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function showStatus(el,type,msg){ el.className="status "+type; el.textContent=msg; }
+function showToast(msg){
+  const t=document.getElementById("toast"); t.textContent=msg;
+  t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2400);
+}
+</script>
+</body>
+</html>
