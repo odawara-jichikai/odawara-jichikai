@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-08T15:50:57.027Z",
+  "generated_at": "2026-07-08T15:52:06.368Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -371,6 +371,15 @@
       "updated_at": "2026-06-27T09:18:23.945Z",
       "year": "2025",
       "month": "01"
+    },
+    {
+      "fileId": "1Vi0krCWm5r0usDKRQn9XwLoLinVJjKnf",
+      "filename": "広報小田原令和8年7月1日 発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11300/pdf/20260702161240.pdf",
+      "isLink": true,
+      "updated_at": "2026-07-08T15:51:44.541Z",
+      "year": "2026",
+      "month": "07"
     },
     {
       "fileId": "1FjbGukkRZGIBQqxHtT91sm1z-8VyCVwp",
