@@ -1,15 +1,8 @@
 {
-  "generated_at": "2026-07-08T15:52:47.134Z",
+  "generated_at": "2026-07-08T16:18:07.765Z",
   "notices": {
     "ok": true,
-    "city": [
-      {
-        "fileId": "11McGeSqidLgwNnUP6lSYLnOa11DdU_3V",
-        "filename": "2026-07-09_【市のおしらせ】テスト.txt",
-        "content": "【市のおしらせ】テスト",
-        "updated_at": "2026-07-08T15:52:42.801Z"
-      }
-    ],
+    "city": [],
     "district": [],
     "ward": []
   }
