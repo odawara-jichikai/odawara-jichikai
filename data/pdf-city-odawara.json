@@ -1,0 +1,574 @@
+{
+  "generated_at": "2026-07-08T15:50:57.027Z",
+  "type": "city",
+  "code": "odawara",
+  "files": [
+    {
+      "fileId": "10COLsNFPpHjUbWO1GKN4eUrz_Mk20KYq",
+      "filename": "スポーツおだわら第124号2025.12.01.pdf",
+      "url": "https://www.odawara-taikyo.or.jp/imgs/sports/124.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-28T06:47:07.971Z",
+      "year": "2025",
+      "month": "12"
+    },
+    {
+      "fileId": "1sUl2g2SmBssLoPlFqzt9obMrsCbuTLo6",
+      "filename": "県のたより12月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2512/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:32:52.793Z",
+      "year": "2025",
+      "month": "12"
+    },
+    {
+      "fileId": "18TP5KdwODm6lKEV_Ha4oUzHm4ZfuQj9T",
+      "filename": "「社協おだわら」No.147　補足資料.pdf",
+      "url": "https://www.odawarashakyou.or.jp/pdf/hosoku_147.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:32:45.897Z",
+      "year": "2025",
+      "month": "12"
+    },
+    {
+      "fileId": "1y2BSWN647I0bF4c4JshlFNAKnP_b2okq",
+      "filename": "「社協おだわら」No.147　2025年12月1日発行.pdf",
+      "url": "https://www.odawarashakyou.or.jp/pdf/kouhou_147web.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:31:56.162Z",
+      "year": "2025",
+      "month": "12"
+    },
+    {
+      "fileId": "1fi0FHGXxF-F7cyS47OmUiUFItVvVdp8L",
+      "filename": "広報小田原令和7年12月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11293/pdf/20251126181241.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:05:52.549Z",
+      "year": "2025",
+      "month": "12"
+    },
+    {
+      "fileId": "1QhDcDc4DQTy-CnpXv0ePnGOxZolC3xT1",
+      "filename": "市議会だより  第175号（11月号）.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/702950/1-20251031085100_b6903f9e433873.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T17:40:00.098Z",
+      "year": "2025",
+      "month": "11"
+    },
+    {
+      "fileId": "1Km7ymV93ISDPJDar-h6H0HZLYiinQvb3",
+      "filename": "県のたより11月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2511/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:32:00.986Z",
+      "year": "2025",
+      "month": "11"
+    },
+    {
+      "fileId": "1RTGdbR5MIJrmsTjhKqyLhKV91vL0d0TX",
+      "filename": "広報小田原令和7年11月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11292/pdf/20251030194037.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:04:58.064Z",
+      "year": "2025",
+      "month": "11"
+    },
+    {
+      "fileId": "1wovQ7CFd7WJKWZk6H5Zb3Wzc4UHvmpHv",
+      "filename": "県のたより10月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2510/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:31:04.163Z",
+      "year": "2025",
+      "month": "10"
+    },
+    {
+      "fileId": "1W6P-Ne3nBEN7WSykTfPrA7vRUj7ppasa",
+      "filename": "広報小田原令和7年10月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11291/pdf/20251008154723.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:03:57.858Z",
+      "year": "2025",
+      "month": "10"
+    },
+    {
+      "fileId": "1oT29MXGra16-m4D2g2hWokYbydl4gd0-",
+      "filename": "スポーツおだわら第123号2025.09.01.pdf",
+      "url": "https://www.odawara-taikyo.or.jp/imgs/sports/123.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-28T06:46:01.002Z",
+      "year": "2025",
+      "month": "09"
+    },
+    {
+      "fileId": "1Nytug_VWgl3z1cFrBM5gCmLZtvqfMadX",
+      "filename": "県のたより9月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2509/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:29:50.553Z",
+      "year": "2025",
+      "month": "09"
+    },
+    {
+      "fileId": "1Y5uljV-YYCJ8XdpHIIOn9wuKQ2j2XiL8",
+      "filename": "「社協おだわら」No.146　補足資料.pdf",
+      "url": "https://www.odawarashakyou.or.jp/pdf/hosoku.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:34:20.267Z",
+      "year": "2025",
+      "month": "09"
+    },
+    {
+      "fileId": "1NWMIJdW-UPg8kbAVFxwQ9yegXbc4nves",
+      "filename": "「社協おだわら」No.146　2025年9月1日発行.pdf",
+      "url": "https://www.odawarashakyou.or.jp/pdf/kouhou_146web.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:33:32.646Z",
+      "year": "2025",
+      "month": "09"
+    },
+    {
+      "fileId": "1TcxzEVa4tSQlkJNqvb8jeimyEImJCNak",
+      "filename": "広報小田原令和7年9月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11290/pdf/20250828184704.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:03:02.298Z",
+      "year": "2025",
+      "month": "09"
+    },
+    {
+      "fileId": "1aTBTyrHlHHWVXwZBf7rIN0ZyA9tDuWpr",
+      "filename": "市議会だより 第174号（8月号）.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/691547/1-20250728125835_b6886f56b17872.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T17:38:51.349Z",
+      "year": "2025",
+      "month": "08"
+    },
+    {
+      "fileId": "1sJT19FDaFLWFOeOeP-cjPv3v6CKTiUhA",
+      "filename": "県のたより8月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2508/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:28:04.058Z",
+      "year": "2025",
+      "month": "08"
+    },
+    {
+      "fileId": "15yFoDbuCy9XBmIaN-nzhbfBMIutps3g5",
+      "filename": "広報小田原令和7年8月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11289/pdf/20250731161010.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:02:11.352Z",
+      "year": "2025",
+      "month": "08"
+    },
+    {
+      "fileId": "1jlqTcP3Tl4UXqZjwV-L9rQoKRVfxxFBf",
+      "filename": "県のたより7月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2507/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:27:10.104Z",
+      "year": "2025",
+      "month": "07"
+    },
+    {
+      "fileId": "1rkRtP59VD__FupfUOpNoOzLqMJicxD5b",
+      "filename": "会報「人・まち・ふれあい」第119号（令和7年度第1号）令和7年7月発行.pdf",
+      "url": "https://odawara-jichisoren.net/global-image/units/upfiles/76164-1-20250623160525_b6858fcb5b8fb4.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:45:26.590Z",
+      "year": "2025",
+      "month": "07"
+    },
+    {
+      "fileId": "17X3lmyLdzEQqsGhQcCCBf_Tb3CqzHX1A",
+      "filename": "広報小田原令和7年7月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11288/pdf/20250627133034.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:01:24.304Z",
+      "year": "2025",
+      "month": "07"
+    },
+    {
+      "fileId": "12Gf8wRY-biVqLqWIIzoK9n7AZWrb8CEI",
+      "filename": "県のたより6月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2506/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:25:29.160Z",
+      "year": "2025",
+      "month": "06"
+    },
+    {
+      "fileId": "1Qv1fOZl_7R847-j2am9lp-sNNfMj3T_9",
+      "filename": "「社協おだわら」No.145　2025年6月1日発行.pdf",
+      "url": "https://www.odawarashakyou.or.jp/pdf/kouhou_145web.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:35:13.240Z",
+      "year": "2025",
+      "month": "06"
+    },
+    {
+      "fileId": "1h2TOgRc28dsoNA6KQMonP-CY9jKeh7Ha",
+      "filename": "広報小田原令和7年6月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11287/pdf/20250530101859.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:00:28.045Z",
+      "year": "2025",
+      "month": "06"
+    },
+    {
+      "fileId": "1xwV8v4QAQiNGsyrU84W_prxY6npKN41d",
+      "filename": "スポーツおだわら第122号2025.05.01.pdf",
+      "url": "https://www.odawara-taikyo.or.jp/imgs/sports/122.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-28T06:44:41.691Z",
+      "year": "2025",
+      "month": "05"
+    },
+    {
+      "fileId": "1ZrxBqwO9yTMDyFzPjtsW8oCgdNnedakj",
+      "filename": "市議会だより  第173号(5月号).pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/658167/1-20250430104209_b68117ff19f90d.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T17:37:48.260Z",
+      "year": "2025",
+      "month": "05"
+    },
+    {
+      "fileId": "1smODLHp1DIM82AZ4A7SxZic0bd4UoYQQ",
+      "filename": "県のたより5月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2505/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:24:31.113Z",
+      "year": "2025",
+      "month": "05"
+    },
+    {
+      "fileId": "1ZoZI_VzZPXr-HznHWy_CSkpNJUb7Y8KV",
+      "filename": "広報小田原令和7年5月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11286/pdf/20250501160311.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:17:42.593Z",
+      "year": "2025",
+      "month": "05"
+    },
+    {
+      "fileId": "1Eax3uMGhccSs3DKx5Vg6qT_h1SQSXMqQ",
+      "filename": "県のたより4月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2504/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:23:04.878Z",
+      "year": "2025",
+      "month": "04"
+    },
+    {
+      "fileId": "18ZUNFt5II8dO1A0XuWYUzyGEs4xCnhRg",
+      "filename": "広報小田原令和7年4月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11285/pdf/20250331175714.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T12:58:31.919Z",
+      "year": "2025",
+      "month": "04"
+    },
+    {
+      "fileId": "1T01shkpw1YWeIQ09nlezyKJmQM8vk7dN",
+      "filename": "ゴミダス29号.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/725321/1-20250326171835_b67e3b85b80b52.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T17:29:11.200Z",
+      "year": "2025",
+      "month": "03"
+    },
+    {
+      "fileId": "1ac1MmRuCaBn0GT5SjskjN0XZaesxoJAW",
+      "filename": "県のたより3月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2503/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T14:25:50.922Z",
+      "year": "2025",
+      "month": "03"
+    },
+    {
+      "fileId": "1PCyRKGTz3zQajN60mzt2n89wQwLoMH2Z",
+      "filename": "機関紙「白ばら」4３号（令和７年3月発行）.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/597557/1-20250408170703_b67f4d927abf57.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T14:04:04.053Z",
+      "year": "2025",
+      "month": "03"
+    },
+    {
+      "fileId": "1U7ldOCArnl-BQ9QoxvBIWbAIE9Kz0O2W",
+      "filename": "会報「人・まち・ふれあい」第118号（令和6年度第2号）令和7年3月発行.pdf",
+      "url": "https://odawara-jichisoren.net/global-image/units/upfiles/76164-1-20250520084349_b682bc2359f7bb.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:44:19.925Z",
+      "year": "2025",
+      "month": "03"
+    },
+    {
+      "fileId": "1ekSx8wWth2jdKJtFwgxoQqj0IMe0YRwK",
+      "filename": "「社協おだわら」No.144　2025年3月1日発行.pdf",
+      "url": "https://www.odawarashakyou.or.jp/pdf/kouhou_144web.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:36:07.473Z",
+      "year": "2025",
+      "month": "03"
+    },
+    {
+      "fileId": "1CMLLROCX2kVaJNLgqHJ_sDevH68p0nOa",
+      "filename": "広報小田原令和7年3月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11284/pdf/20250228152917.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T12:57:12.710Z",
+      "year": "2025",
+      "month": "03"
+    },
+    {
+      "fileId": "14MGlT96Z918hOKrCYXxSUgUpr4zasOdt",
+      "filename": "市議会だより 第172号（２月号）.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/702952/1-20251031085207_b6903fa275216e.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T17:35:30.501Z",
+      "year": "2025",
+      "month": "02"
+    },
+    {
+      "fileId": "1purWPQL3LKO1zQlWso6075fiDbJmr_Xs",
+      "filename": "県のたより2月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2502/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T14:24:53.091Z",
+      "year": "2025",
+      "month": "02"
+    },
+    {
+      "fileId": "1l-p31Yxcda2Bx2WFlFD_0eROz3rCDxF7",
+      "filename": "広報小田原令和7年2月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11283/pdf/20250131150146.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T09:34:17.890Z",
+      "year": "2025",
+      "month": "02"
+    },
+    {
+      "fileId": "1mQvEeoSBQEL7JWcwUiXceGLdZGyV6CuT",
+      "filename": "県のたより1月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2501/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T14:20:21.641Z",
+      "year": "2025",
+      "month": "01"
+    },
+    {
+      "fileId": "1ctGjRKOzhDj2JKcYmRxk4Pv5QFBT2GNB",
+      "filename": "広報小田原令和7年1月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11282/pdf/20241227152332.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T09:18:23.945Z",
+      "year": "2025",
+      "month": "01"
+    },
+    {
+      "fileId": "1FjbGukkRZGIBQqxHtT91sm1z-8VyCVwp",
+      "filename": "県のたより7月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2607/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-30T23:04:51.957Z",
+      "year": "2026",
+      "month": "07"
+    },
+    {
+      "fileId": "1dLscUdgo31pWeKTmaFJUMP5Vd-qXLth_",
+      "filename": "県のたより4月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2604/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:38:04.357Z",
+      "year": "2026",
+      "month": "04"
+    },
+    {
+      "fileId": "1UobQBVwuGMv6CrH94cDWA8C7l870o5ZI",
+      "filename": "広報小田原令和8年4月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11297/pdf/20260327194532.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:10:01.024Z",
+      "year": "2026",
+      "month": "04"
+    },
+    {
+      "fileId": "1VnJdBd88KZyMZh9wvFSbFcwhFiEjEEpj",
+      "filename": "ゴミダス30号.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/627451/1-20260327124452_b69c5fd348476c.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T17:30:32.379Z",
+      "year": "2026",
+      "month": "03"
+    },
+    {
+      "fileId": "1qBxmh7MnUD5c2X-ICOlKmTt6zigwmxiY",
+      "filename": "県のたより3月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2603/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:36:18.178Z",
+      "year": "2026",
+      "month": "03"
+    },
+    {
+      "fileId": "16gg1CKE_eejj6Vy_fvcKr6usQrAxIpzr",
+      "filename": "会報「人・まち・ふれあい」第120号（令和7年度第2号）令和8年3月発行.pdf",
+      "url": "https://odawara-jichisoren.net/global-image/units/upfiles/84887-1-20260313150312_b69b3a8a047510.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:46:32.090Z",
+      "year": "2026",
+      "month": "03"
+    },
+    {
+      "fileId": "1HHfKRXarXZE1ZQEtaRCTQVYfmaKXsRvB",
+      "filename": "「社協おだわら」No.148　2026年3月1日発行.pdf",
+      "url": "https://www.odawarashakyou.or.jp/pdf/kouhou_148web.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:30:59.471Z",
+      "year": "2026",
+      "month": "03"
+    },
+    {
+      "fileId": "1ke9zdb-N6bSOJZ8wWxsBSFenDx0LN7v6",
+      "filename": "広報小田原令和8年3月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11296/pdf/20260226104239.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:09:03.465Z",
+      "year": "2026",
+      "month": "03"
+    },
+    {
+      "fileId": "1B5y4JAYRhJ7kea-K2d-dPtWTnP3niuQg",
+      "filename": "【足柄地区】令和８年度ごみと資源の収集日カレンダー.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/719695/1-20260226154930_b699fecfa2d56f.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T17:48:59.682Z",
+      "year": "2026",
+      "month": "02"
+    },
+    {
+      "fileId": "1YtdHcYbz1XYuCdya7ONM1PGc4kBzTL6q",
+      "filename": "市議会だより 第176号（２月号）.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/714472/1-20260123120052_b6972e464be60a.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T17:41:25.674Z",
+      "year": "2026",
+      "month": "02"
+    },
+    {
+      "fileId": "1RP3KuPuJuTEpmC5AcjUfOKJiq_LX00Sw",
+      "filename": "県のたより2月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2602/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:35:18.742Z",
+      "year": "2026",
+      "month": "02"
+    },
+    {
+      "fileId": "1BPtHJ-ZgcoL-5Yh_W8MRAadL7waUOD3w",
+      "filename": "広報小田原令和8年2月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11295/pdf/20260216114230.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:07:58.429Z",
+      "year": "2026",
+      "month": "02"
+    },
+    {
+      "fileId": "1D7E0fX09J67NsBCOBb08Ci_b9WXUbbVS",
+      "filename": "県のたより1月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2601/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:34:26.373Z",
+      "year": "2026",
+      "month": "01"
+    },
+    {
+      "fileId": "1ocl9Uvjn7wCKOzRgAZd05XnlRVJJnJwX",
+      "filename": "広報小田原令和8年1月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11294/pdf/20251224165408.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:06:59.841Z",
+      "year": "2026",
+      "month": "01"
+    },
+    {
+      "fileId": "17hseBpK5UAM4AUIofjoZtCffZvH0JPtP",
+      "filename": "スポーツおだわら第125号2026.05.01.pdf",
+      "url": "https://www.odawara-taikyo.or.jp/imgs/sports/125.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-28T06:48:13.314Z",
+      "year": "2026",
+      "month": "05"
+    },
+    {
+      "fileId": "1VszYPPCUF8QtVU_4TX-zzIz8WeDEqkB2",
+      "filename": "市議会だより  第177号（５月号）.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/728334/1-20260422120015_b69e839bf7fbe8.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T17:42:22.359Z",
+      "year": "2026",
+      "month": "05"
+    },
+    {
+      "fileId": "13cQZmaih6mA36rZFATGYMn0hI-soyukj",
+      "filename": "県のたより5月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2605/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:39:03.306Z",
+      "year": "2026",
+      "month": "05"
+    },
+    {
+      "fileId": "1vc0G_J5NUghzcQaQaRCNpueeXRANxZjN",
+      "filename": "機関紙「白ばら」４４号（令和８年５月発行）.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/733399/1-20260522091525_b6a0fa01deb94e.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T14:05:14.519Z",
+      "year": "2026",
+      "month": "05"
+    },
+    {
+      "fileId": "1ltLgd-ikC2OlC5wM1jJvZRKtR0ikm5P6",
+      "filename": "広報小田原令和8年5月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11298/pdf/20260430155833.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:23:14.863Z",
+      "year": "2026",
+      "month": "05"
+    },
+    {
+      "fileId": "1uFFdr5kUM7sCqid27WFKk-2MkUZ_9pja",
+      "filename": "県のたより6月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2606/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T15:40:35.732Z",
+      "year": "2026",
+      "month": "06"
+    },
+    {
+      "fileId": "1YCazs70l62epgjQ0lrz1inIK3b0GCDTS",
+      "filename": "「社協おだわら」No.149　2026年6月1日発行.pdf",
+      "url": "https://www.odawarashakyou.or.jp/pdf/kouhou_149web.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:30:04.100Z",
+      "year": "2026",
+      "month": "06"
+    },
+    {
+      "fileId": "1uujKm1fZkNYEcatZC-ASjbngldeH6fWm",
+      "filename": "広報小田原令和8年6月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11299/pdf/20260609170116.pdf",
+      "isLink": true,
+      "updated_at": "2026-06-27T13:11:42.592Z",
+      "year": "2026",
+      "month": "06"
+    }
+  ]
+}
