@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-07-08T15:53:34.335Z",
+  "trashTypes": [
+    {
+      "id": "t1",
+      "label": "①燃せるごみ",
+      "color": "#f7c6d9",
+      "sort": null
+    },
+    {
+      "id": "t2",
+      "label": "②紙・布類",
+      "color": "#dcefc8",
+      "sort": null
+    },
+    {
+      "id": "t3",
+      "label": "③ペットボトル",
+      "color": "#fbe98a",
+      "sort": null
+    },
+    {
+      "id": "t4",
+      "label": "④トレー類",
+      "color": "#ffd9ad",
+      "sort": null
+    },
+    {
+      "id": "t5",
+      "label": "⑤かん類",
+      "color": "#bfe6f2",
+      "sort": null
+    },
+    {
+      "id": "t6",
+      "label": "⑥びん類",
+      "color": "#c9e8c2",
+      "sort": null
+    },
+    {
+      "id": "t7",
+      "label": "⑦燃せないごみ",
+      "color": "#dcdcdc",
+      "sort": null
+    },
+    {
+      "id": "t8",
+      "label": "⑧スプレー缶など",
+      "color": "#ddd0f0",
+      "sort": null
+    },
+    {
+      "id": "t9",
+      "label": "",
+      "color": "#c9ece4",
+      "sort": null
+    },
+    {
+      "id": "t10",
+      "label": "",
+      "color": "#e6d7c3",
+      "sort": null
+    }
+  ]
+}
