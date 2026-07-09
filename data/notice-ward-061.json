@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-09T18:32:22.438Z",
+  "generated_at": "2026-07-09T18:32:41.695Z",
   "notices": {
     "ok": true,
     "city": [
@@ -11,6 +11,13 @@
       }
     ],
     "district": [],
-    "ward": []
+    "ward": [
+      {
+        "fileId": "1LGHRC9XEtvfoE-dpcG1s9F9MUvjxuQgq",
+        "filename": "2026-07-10_6_6 クリーン山王川無事終わりました、ご協力ありがとうございました。.txt",
+        "content": "6/6 クリーン山王川無事終わりました、ご協力ありがとうございました。",
+        "updated_at": "2026-07-09T18:32:34.633Z"
+      }
+    ]
   }
 }
