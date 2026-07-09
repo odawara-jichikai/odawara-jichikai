@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-08T23:57:09.244Z",
+  "generated_at": "2026-07-09T18:27:16.429Z",
   "notices": {
     "ok": true,
     "city": [
@@ -10,14 +10,7 @@
         "updated_at": "2026-07-08T16:18:25.150Z"
       }
     ],
-    "district": [
-      {
-        "fileId": "1phel1X490muqrISetUEXot3EovJ3go1l",
-        "filename": "2026-07-09_【地区のおしらせ】テスト.txt",
-        "content": "【地区のおしらせ】テスト",
-        "updated_at": "2026-07-08T23:57:05.577Z"
-      }
-    ],
+    "district": [],
     "ward": []
   }
 }
