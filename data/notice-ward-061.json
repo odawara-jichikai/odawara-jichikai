@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-09T18:45:28.120Z",
+  "generated_at": "2026-07-09T18:45:46.369Z",
   "notices": {
     "ok": true,
     "city": [
@@ -18,6 +18,13 @@
         "updated_at": "2026-07-09T18:27:31.520Z"
       }
     ],
-    "ward": []
+    "ward": [
+      {
+        "fileId": "1bZAtFgeJqpvbZ8cwngcQ5oBUR5F2ypMn",
+        "filename": "2026-07-10_6_6 クリーン山王川無事終わりました、ご協力ありがとうございました。.txt",
+        "content": "6/6 クリーン山王川無事終わりました、ご協力ありがとうございました。",
+        "updated_at": "2026-07-09T18:45:39.256Z"
+      }
+    ]
   }
 }
