@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-08T15:52:06.368Z",
+  "generated_at": "2026-07-23T15:50:35.275Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -371,6 +371,15 @@
       "updated_at": "2026-06-27T09:18:23.945Z",
       "year": "2025",
       "month": "01"
+    },
+    {
+      "fileId": "1Rr9QTZqRAzTOGodyaf_FO1P5qpI8H4W5",
+      "filename": "県民のまもり　第322号.pdf",
+      "url": "https://www.police.pref.kanagawa.jp/assets/entry/a8048_02.pdf",
+      "isLink": true,
+      "updated_at": "2026-07-23T15:50:06.590Z",
+      "year": "2026",
+      "month": "08"
     },
     {
       "fileId": "1Vi0krCWm5r0usDKRQn9XwLoLinVJjKnf",
