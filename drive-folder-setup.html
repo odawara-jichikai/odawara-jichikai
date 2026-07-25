@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>既存フォルダの許可し直しツール（1回限り）</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif;background:#f0f7ff;color:#1e3a4f;min-height:100vh}
+
+:root{
+  --blue:#3a8fc7;--blue-dark:#1e6fa3;--blue-light:#e6f3fb;--blue-pale:#d0eaf9;
+  --green:#4caf82;--green-light:#e8f7ef;
+  --red:#e05c5c;--red-light:#fdeaea;
+  --amber:#f8bd68;--amber-light:#fff4e0;
+  --border:#c8dff0;--white:#fff;
+  --text:#1e3a4f;--text2:#4a6a80;--text3:#7a9ab0;
+  --shadow:0 2px 12px rgba(58,143,199,0.10);--radius:12px;
+}
+
+header{background:var(--blue);padding:0 20px;height:54px;display:flex;align-items:center;box-shadow:0 2px 8px rgba(30,111,163,0.2)}
+header h1{color:#fff;font-size:17px;font-weight:700}
+header .subtitle{color:rgba(255,255,255,0.75);font-size:12px;margin-left:12px}
+
+.page{max-width:640px;margin:0 auto;padding:24px 16px 60px}
+
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px}
+.card-header{padding:14px 18px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;background:var(--blue);color:#fff}
+.card-header.sky{background:var(--blue-light);color:var(--blue-dark);border-bottom:1px solid var(--blue-pale)}
+.card-body{padding:20px}
+
+.item{
+  display:flex;align-items:center;gap:14px;
+  padding:16px;border:1px solid var(--border);border-radius:10px;margin-bottom:12px;
+  background:var(--blue-light);
+}
+.item.done{background:var(--green-light);border-color:var(--green)}
+.item-icon{font-size:26px;width:36px;text-align:center;flex-shrink:0}
+.item-body{flex:1}
+.item-title{font-weight:700;font-size:15px;color:var(--text)}
+.item-hint{font-size:12px;color:var(--text2);margin-top:2px}
+.item-status{font-size:12px;color:var(--text3);margin-top:4px}
+.item.done .item-status{color:#1a6b3a;font-weight:700}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-done{background:var(--green);color:#fff}
+
+.status{padding:12px 14px;border-radius:8px;font-size:13px;margin-top:14px;display:none;line-height:1.6}
+.status.success{background:var(--green-light);color:#1a6b3a;display:block}
+.status.error{background:var(--red-light);color:#8b2020;display:block}
+.status.loading{background:var(--blue-light);color:var(--blue-dark);display:block}
+
+.config-warning{
+  background:var(--amber-light);border:1px solid var(--amber);border-radius:10px;
+  padding:14px;font-size:13px;color:#8a5a10;line-height:1.6;margin-bottom:16px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔑 既存フォルダの許可し直しツール</h1>
+  <span class="subtitle">1回限り・システム管理者専用</span>
+</header>
+
+<main class="page">
+
+  <div class="card">
+    <div class="card-header sky">📋 ご案内</div>
+    <div class="card-body" style="font-size:13px;color:var(--text2);line-height:1.7">
+      これは、既存のGoogle Driveフォルダに対して、システムからの限定的なアクセス（drive.fileスコープ）を
+      許可し直すための、1回限りの作業用ツールです。<br><br>
+      下の4つのフォルダを、それぞれ「フォルダを選択」ボタンから、Googleのファイル選択画面で選び直してください。
+      すべて完了したら、この作業は二度と行う必要はありません。<br><br>
+      odawara.jichikai@ でログインした状態で操作してください。
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">📂 許可し直すフォルダ（4つ）</div>
+    <div class="card-body">
+
+      <div class="config-warning" id="config-warning">
+        ⚠️ 使用前に、このファイルの下部にある CLIENT_ID と API_KEY を、ご自身のものに書き換えてください。
+      </div>
+
+      <div class="item" id="item-city">
+        <div class="item-icon">🏛️</div>
+        <div class="item-body">
+          <div class="item-title">市のPDFフォルダ</div>
+          <div class="item-hint">city_folder_id が指す、市担当者用のPDF保管フォルダ</div>
+          <div class="item-status" id="status-city">未実施</div>
+        </div>
+        <button class="btn btn-primary" onclick="pickFolder('city')">フォルダを選択</button>
+      </div>
+
+      <div class="item" id="item-wards">
+        <div class="item-icon">📦</div>
+        <div class="item-body">
+          <div class="item-title">wards-dx（区フォルダ全体）</div>
+          <div class="item-hint">マイドライブ直下の「wards-dx」フォルダ</div>
+          <div class="item-status" id="status-wards">未実施</div>
+        </div>
+        <button class="btn btn-primary" onclick="pickFolder('wards')">フォルダを選択</button>
+      </div>
+
+      <div class="item" id="item-districts">
+        <div class="item-icon">🏘️</div>
+        <div class="item-body">
+          <div class="item-title">districts-dx（地区フォルダ全体）</div>
+          <div class="item-hint">マイドライブ直下の「districts-dx」フォルダ</div>
+          <div class="item-status" id="status-districts">未実施</div>
+        </div>
+        <button class="btn btn-primary" onclick="pickFolder('districts')">フォルダを選択</button>
+      </div>
+
+      <div class="item" id="item-backup">
+        <div class="item-icon">🗄️</div>
+        <div class="item-body">
+          <div class="item-title">名簿バックアップフォルダ</div>
+          <div class="item-hint">BACKUP_FOLDER_ID が指す、meibo-bkup フォルダ</div>
+          <div class="item-status" id="status-backup">未実施</div>
+        </div>
+        <button class="btn btn-primary" onclick="pickFolder('backup')">フォルダを選択</button>
+      </div>
+
+      <div class="status" id="main-status"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header sky">✅ 完了後の確認</div>
+    <div class="card-body" style="font-size:13px;color:var(--text2);line-height:1.7">
+      4つすべてが「許可済み」になったら、この作業は完了です。<br>
+      次のステップ（appsscript.jsonのスコープ変更・再デプロイ）に進んでください。
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ============================================================
+// ここを、ご自身のプロジェクトの値に書き換えてください
+// ============================================================
+const CLIENT_ID = "YOUR_OAUTH_CLIENT_ID.apps.googleusercontent.com";
+const API_KEY   = "YOUR_API_KEY";
+const SCOPE     = "https://www.googleapis.com/auth/drive.file";
+// ============================================================
+
+let tokenClient = null;
+let accessToken = null;
+let pickerApiLoaded = false;
+const doneItems = { city: false, wards: false, districts: false, backup: false };
+
+function showStatus(type, msg){
+  const el = document.getElementById("main-status");
+  el.className = "status " + type;
+  el.textContent = msg;
+}
+
+function markDone(key){
+  doneItems[key] = true;
+  const item = document.getElementById("item-" + key);
+  const status = document.getElementById("status-" + key);
+  item.classList.add("done");
+  status.textContent = "許可済み ✓";
+}
+
+// Google Identity Services（GIS）読み込み後、トークンクライアントを準備
+window.onload = () => {
+  if (CLIENT_ID.startsWith("YOUR_") || API_KEY.startsWith("YOUR_")) {
+    document.getElementById("config-warning").style.display = "block";
+  } else {
+    document.getElementById("config-warning").style.display = "none";
+  }
+
+  google.accounts.oauth2 && initTokenClient();
+  gapi.load("picker", () => { pickerApiLoaded = true; });
+};
+
+function initTokenClient(){
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: SCOPE,
+    callback: "", // 呼び出し時に都度上書きする
+  });
+}
+
+function ensureToken(callback){
+  if (accessToken) { callback(); return; }
+  tokenClient.callback = (resp) => {
+    if (resp.error) {
+      showStatus("error", "認証エラー：" + resp.error);
+      return;
+    }
+    accessToken = resp.access_token;
+    callback();
+  };
+  tokenClient.requestAccessToken({ prompt: "" });
+}
+
+function pickFolder(key){
+  showStatus("loading", "Googleの認証画面を確認してください...");
+  ensureToken(() => {
+    if (!pickerApiLoaded) {
+      showStatus("error", "Picker APIの読み込み中です。数秒待ってからもう一度お試しください。");
+      return;
+    }
+    openPicker(key);
+  });
+}
+
+function openPicker(key){
+  const view = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
+    .setIncludeFolders(true)
+    .setSelectFolderEnabled(true)
+    .setMimeTypes("application/vnd.google-apps.folder");
+
+  const picker = new google.picker.PickerBuilder()
+    .setOAuthToken(accessToken)
+    .setDeveloperKey(API_KEY)
+    .addView(view)
+    .setTitle("「" + folderLabel(key) + "」を選択してください")
+    .setCallback((data) => pickerCallback(data, key))
+    .build();
+  picker.setVisible(true);
+  showStatus("", "");
+}
+
+function folderLabel(key){
+  return {
+    city: "市のPDFフォルダ",
+    wards: "wards-dx",
+    districts: "districts-dx",
+    backup: "名簿バックアップフォルダ（meibo-bkup）",
+  }[key] || key;
+}
+
+function pickerCallback(data, key){
+  if (data.action === google.picker.Action.PICKED) {
+    const doc = data.docs[0];
+    markDone(key);
+    showStatus("success",
+      "「" + doc.name + "」を許可しました（ID: " + doc.id + "）。"
+      + "この名前が想定しているフォルダ名と一致しているか確認してください。");
+  } else if (data.action === google.picker.Action.CANCEL) {
+    showStatus("error", "選択がキャンセルされました。もう一度「フォルダを選択」を押してください。");
+  }
+}
+</script>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js"></script>
+</body>
+</html>
