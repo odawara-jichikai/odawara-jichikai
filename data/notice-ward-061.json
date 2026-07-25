@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-09T18:45:46.369Z",
+  "generated_at": "2026-07-25T23:19:20.811Z",
   "notices": {
     "ok": true,
     "city": [
@@ -12,19 +12,12 @@
     ],
     "district": [
       {
-        "fileId": "1KS75zZSTQ33yfHkqQYXJCrpPmb4rqmOh",
+        "fileId": "1dyZik8tXfLXmfSlJYLiLeV4xv3i-x4AA",
         "filename": "2026-07-10_【地区のおしらせ】テスト.txt",
         "content": "【地区のおしらせ】テスト",
-        "updated_at": "2026-07-09T18:27:31.520Z"
+        "updated_at": "2026-07-09T18:46:33.216Z"
       }
     ],
-    "ward": [
-      {
-        "fileId": "1bZAtFgeJqpvbZ8cwngcQ5oBUR5F2ypMn",
-        "filename": "2026-07-10_6_6 クリーン山王川無事終わりました、ご協力ありがとうございました。.txt",
-        "content": "6/6 クリーン山王川無事終わりました、ご協力ありがとうございました。",
-        "updated_at": "2026-07-09T18:45:39.256Z"
-      }
-    ]
+    "ward": []
   }
 }
