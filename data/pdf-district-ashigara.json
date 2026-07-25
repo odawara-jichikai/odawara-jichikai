@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-25T23:14:23.453Z",
+  "generated_at": "2026-07-25T23:48:10.964Z",
   "type": "district",
   "code": "ashigara",
   "files": [
@@ -11,15 +11,6 @@
       "updated_at": "2026-07-04T23:06:51.692Z",
       "year": "2026",
       "month": "07"
-    },
-    {
-      "fileId": "1uH0Wx5AZgxiug_a-VTl38hW03fSg9k3v",
-      "filename": "お盆供養物搬出について(8/16).pdf.pdf",
-      "url": "https://drive.google.com/file/d/1uH0Wx5AZgxiug_a-VTl38hW03fSg9k3v/view",
-      "isLink": false,
-      "updated_at": "2026-07-25T23:14:21.339Z",
-      "year": "2026",
-      "month": "08"
     }
   ]
 }
