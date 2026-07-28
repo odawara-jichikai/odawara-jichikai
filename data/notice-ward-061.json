@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T14:54:36.038Z",
+  "generated_at": "2026-07-28T14:57:07.766Z",
   "notices": {
     "ok": true,
     "city": [],
@@ -28,12 +28,6 @@
         "filename": "2026-07-28_【区のおしらせ】テスト.txt",
         "content": "【区のおしらせ】テスト",
         "updated_at": "2026-07-28T13:41:35.601Z"
-      },
-      {
-        "fileId": "1KFr3fgcdqgYVNnFXfpRKuEInt-pwPslq",
-        "filename": "2026-07-28_【区のおしらせ】テスト.txt",
-        "content": "【区のおしらせ】テスト",
-        "updated_at": "2026-07-28T13:40:51.502Z"
       }
     ]
   }
