@@ -1,9 +1,16 @@
 {
-  "generated_at": "2026-07-28T14:57:51.318Z",
+  "generated_at": "2026-07-28T14:58:06.137Z",
   "notices": {
     "ok": true,
     "city": [],
     "district": [],
-    "ward": []
+    "ward": [
+      {
+        "fileId": "1Kdi2GBkw7nf5wJ4WtY1yRg9UjetTLsIZ",
+        "filename": "2026-07-28_【区のおしらせ】テスト.txt",
+        "content": "【区のおしらせ】テスト",
+        "updated_at": "2026-07-28T14:58:02.556Z"
+      }
+    ]
   }
 }
