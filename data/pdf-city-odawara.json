@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T15:42:47.304Z",
+  "generated_at": "2026-08-02T15:43:43.010Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -63,6 +63,15 @@
       "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11286/pdf/20250501160311.pdf",
       "isLink": true,
       "updated_at": "2026-08-02T15:42:41.071Z",
+      "year": "2025",
+      "month": "05"
+    },
+    {
+      "fileId": "1q40rg2Hh8gdwhF-4l9FwI2Nrgxh06JNX",
+      "filename": "市議会だより  第173号(5月号).pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/658167/1-20250430104209_b68117ff19f90d.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T15:43:33.650Z",
       "year": "2025",
       "month": "05"
     },
