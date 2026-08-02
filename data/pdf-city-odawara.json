@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T16:26:58.994Z",
+  "generated_at": "2026-08-02T16:28:25.675Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -38,6 +38,15 @@
       "updated_at": "2026-08-02T02:45:01.511Z",
       "year": "2026",
       "month": "08"
+    },
+    {
+      "fileId": "1S4fTfqAtj2uQqU5fjHX-pmz8LlrOU_Kq",
+      "filename": "「社協おだわら」No.149　2026年6月1日発行.pdf",
+      "url": "https://www.odawarashakyou.or.jp/pdf/kouhou_149web.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T16:28:07.989Z",
+      "year": "2026",
+      "month": "06"
     },
     {
       "fileId": "1JPPL8uLBIsEXk7I6XVug7UhIild3RBnm",
