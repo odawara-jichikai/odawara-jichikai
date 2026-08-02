@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T15:38:41.501Z",
+  "generated_at": "2026-08-02T15:39:38.285Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -38,6 +38,15 @@
       "updated_at": "2026-08-02T02:45:01.511Z",
       "year": "2026",
       "month": "08"
+    },
+    {
+      "fileId": "14Q9AhXnKfyR7jAGLw7XYeyhYWQGqBoDr",
+      "filename": "県のたより4月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2504/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T15:39:32.436Z",
+      "year": "2025",
+      "month": "04"
     },
     {
       "fileId": "1knfZ5JTCRRCcDAjHLYkXY_Pq85HBcWQW",
