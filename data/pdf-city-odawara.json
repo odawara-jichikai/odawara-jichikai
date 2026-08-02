@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T15:48:44.089Z",
+  "generated_at": "2026-08-02T15:49:22.371Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -45,6 +45,15 @@
       "url": "https://www.pref.kanagawa.jp/tayori/2506/01-01.pdf",
       "isLink": true,
       "updated_at": "2026-08-02T15:48:36.173Z",
+      "year": "2025",
+      "month": "06"
+    },
+    {
+      "fileId": "1NBJDnbxDXDncfKi5mlsmShXveRQU-6XR",
+      "filename": "広報小田原令和7年6月1日発行.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/odawaraArch/11287/pdf/20250530101859.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T15:49:13.287Z",
       "year": "2025",
       "month": "06"
     },
