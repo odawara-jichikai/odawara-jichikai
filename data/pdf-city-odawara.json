@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T15:41:22.355Z",
+  "generated_at": "2026-08-02T15:42:02.070Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -45,6 +45,15 @@
       "url": "https://www.odawara-taikyo.or.jp/imgs/sports/122.pdf",
       "isLink": true,
       "updated_at": "2026-08-02T15:41:16.025Z",
+      "year": "2025",
+      "month": "05"
+    },
+    {
+      "fileId": "1XwI4QXjTJvqKsvuuoHw3rqVT-SeR4Ad1",
+      "filename": "県のたより5月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2505/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T15:41:55.359Z",
       "year": "2025",
       "month": "05"
     },
