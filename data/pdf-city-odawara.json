@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T15:49:22.371Z",
+  "generated_at": "2026-08-02T15:50:14.882Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -38,6 +38,15 @@
       "updated_at": "2026-08-02T02:45:01.511Z",
       "year": "2026",
       "month": "08"
+    },
+    {
+      "fileId": "1zU9L9QoS_7RQWeHGIMeoxix_f0ocol1e",
+      "filename": "会報「人・まち・ふれあい」第119号（令和7年度第1号）令和7年7月発行.pdf",
+      "url": "https://odawara-jichisoren.net/global-image/units/upfiles/76164-1-20250623160525_b6858fcb5b8fb4.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T15:50:07.565Z",
+      "year": "2025",
+      "month": "07"
     },
     {
       "fileId": "1gJD5bILQmyGU-he3l9G7BU1SZSw51Jnp",
