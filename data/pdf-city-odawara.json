@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T16:06:13.705Z",
+  "generated_at": "2026-08-02T16:07:19.266Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -54,6 +54,15 @@
       "url": "https://www.odawarashakyou.or.jp/pdf/hosoku_147.pdf",
       "isLink": true,
       "updated_at": "2026-08-02T16:05:57.535Z",
+      "year": "2025",
+      "month": "12"
+    },
+    {
+      "fileId": "1FATHnR1IK7aSdbmpT06ACT4PhOZE1TOl",
+      "filename": "スポーツおだわら第124号2025.12.01.pdf",
+      "url": "https://www.odawara-taikyo.or.jp/imgs/sports/124.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T16:07:07.227Z",
       "year": "2025",
       "month": "12"
     },
