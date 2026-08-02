@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T16:05:12.383Z",
+  "generated_at": "2026-08-02T16:06:13.705Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -45,6 +45,15 @@
       "url": "https://www.odawarashakyou.or.jp/pdf/kouhou_147web.pdf",
       "isLink": true,
       "updated_at": "2026-08-02T16:04:57.684Z",
+      "year": "2025",
+      "month": "12"
+    },
+    {
+      "fileId": "1wg5y4413DoLvQ1BicGeX62xE0bkGPka-",
+      "filename": "「社協おだわら」No.147　補足資料.pdf",
+      "url": "https://www.odawarashakyou.or.jp/pdf/hosoku_147.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T16:05:57.535Z",
       "year": "2025",
       "month": "12"
     },
