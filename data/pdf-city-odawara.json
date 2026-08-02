@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T16:16:32.790Z",
+  "generated_at": "2026-08-02T16:17:15.358Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -54,6 +54,15 @@
       "url": "https://www.city.odawara.kanagawa.jp/global-image/units/627451/1-20260327124452_b69c5fd348476c.pdf",
       "isLink": true,
       "updated_at": "2026-08-02T16:16:11.857Z",
+      "year": "2026",
+      "month": "03"
+    },
+    {
+      "fileId": "1NAWx6xnjTDpk4UKhQAjcBMexxYAYu1Iy",
+      "filename": "会報「人・まち・ふれあい」第120号（令和7年度第2号）令和8年3月発行.pdf",
+      "url": "https://odawara-jichisoren.net/global-image/units/upfiles/84887-1-20260313150312_b69b3a8a047510.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T16:17:00.965Z",
       "year": "2026",
       "month": "03"
     },
