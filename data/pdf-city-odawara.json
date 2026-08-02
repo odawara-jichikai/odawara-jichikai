@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T15:36:32.871Z",
+  "generated_at": "2026-08-02T15:37:13.667Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -63,6 +63,15 @@
       "url": "https://odawara-jichisoren.net/global-image/units/upfiles/76164-1-20250520084349_b682bc2359f7bb.pdf",
       "isLink": true,
       "updated_at": "2026-08-02T15:36:27.706Z",
+      "year": "2025",
+      "month": "03"
+    },
+    {
+      "fileId": "1zdxjB7U41RzUqOgMiANbAiE91rglfQZh",
+      "filename": "機関紙「白ばら」4３号（令和７年3月発行）.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/597557/1-20250408170703_b67f4d927abf57.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T15:37:08.788Z",
       "year": "2025",
       "month": "03"
     },
