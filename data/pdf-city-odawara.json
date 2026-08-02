@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T16:22:05.359Z",
+  "generated_at": "2026-08-02T16:23:03.573Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -45,6 +45,15 @@
       "url": "https://www.odawara-taikyo.or.jp/imgs/sports/125.pdf",
       "isLink": true,
       "updated_at": "2026-08-02T16:21:43.821Z",
+      "year": "2026",
+      "month": "05"
+    },
+    {
+      "fileId": "1o1iHtRJFQRo3OaEPoZ-nhIaKnTVPjIeP",
+      "filename": "機関紙「白ばら」４４号（令和８年５月発行）.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/733399/1-20260522091525_b6a0fa01deb94e.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T16:22:47.643Z",
       "year": "2026",
       "month": "05"
     },
