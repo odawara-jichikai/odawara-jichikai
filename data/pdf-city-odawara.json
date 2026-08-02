@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T16:28:25.675Z",
+  "generated_at": "2026-08-02T16:29:29.344Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -45,6 +45,15 @@
       "url": "https://www.odawarashakyou.or.jp/pdf/kouhou_149web.pdf",
       "isLink": true,
       "updated_at": "2026-08-02T16:28:07.989Z",
+      "year": "2026",
+      "month": "06"
+    },
+    {
+      "fileId": "1VtgSsR-lhkxGYQvQRobAJ1r94wKnGw4T",
+      "filename": "県のたより6月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2606/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T16:29:06.308Z",
       "year": "2026",
       "month": "06"
     },
