@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T16:15:37.571Z",
+  "generated_at": "2026-08-02T16:16:32.790Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -45,6 +45,15 @@
       "url": "https://www.odawarashakyou.or.jp/pdf/kouhou_148web.pdf",
       "isLink": true,
       "updated_at": "2026-08-02T16:15:13.000Z",
+      "year": "2026",
+      "month": "03"
+    },
+    {
+      "fileId": "13hvzP8Wzp3kYUlHqqb6AvjeblA1-rp0T",
+      "filename": "ゴミダス30号.pdf",
+      "url": "https://www.city.odawara.kanagawa.jp/global-image/units/627451/1-20260327124452_b69c5fd348476c.pdf",
+      "isLink": true,
+      "updated_at": "2026-08-02T16:16:11.857Z",
       "year": "2026",
       "month": "03"
     },
