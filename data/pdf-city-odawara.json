@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-23T07:08:06.213Z",
+  "generated_at": "2026-09-01T16:41:33.657Z",
   "type": "city",
   "code": "odawara",
   "files": [
@@ -9,6 +9,15 @@
       "url": "https://odawara-umemaru.com/index.html",
       "isLink": true,
       "updated_at": "2026-08-23T06:54:28.359Z",
+      "year": "2026",
+      "month": "09"
+    },
+    {
+      "fileId": "1iKQ7tJpyhJKwrwHTzQTvTwFWXYABQEc1",
+      "filename": "「社協おだわら」No.150　2026年9月1日発行.pdf",
+      "url": "https://www.odawarashakyou.or.jp/pdf/kouhou_150web.pdf",
+      "isLink": true,
+      "updated_at": "2026-09-01T16:41:03.641Z",
       "year": "2026",
       "month": "09"
     },
