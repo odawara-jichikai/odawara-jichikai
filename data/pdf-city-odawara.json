@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-09-01T16:47:24.785Z",
+  "generated_at": "2026-10-02T22:25:48.022Z",
   "type": "city",
   "code": "odawara",
   "files": [
+    {
+      "fileId": "1gRhj1YIoxNvBBPFOdTkIcbPYv32B5DJH",
+      "filename": "県のたより１０月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2610/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-10-02T22:25:13.068Z",
+      "year": "2026",
+      "month": "10"
+    },
     {
       "fileId": "1gmFKgccPgj1DwzyND6-C9yml7-y-f4tp",
       "filename": "「かなトク！おだわら梅丸商品券」発行事業.pdf",
