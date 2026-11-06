@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-10-02T22:27:54.372Z",
+  "generated_at": "2026-11-06T22:03:10.697Z",
   "type": "city",
   "code": "odawara",
   "files": [
+    {
+      "fileId": "135PGBoC3dM16c2nEH9VWNL5MbBsCWF2u",
+      "filename": "県のたより１１月号.pdf",
+      "url": "https://www.pref.kanagawa.jp/tayori/2611/01-01.pdf",
+      "isLink": true,
+      "updated_at": "2026-11-06T22:02:31.180Z",
+      "year": "2026",
+      "month": "11"
+    },
     {
       "fileId": "1gRhj1YIoxNvBBPFOdTkIcbPYv32B5DJH",
       "filename": "県のたより１０月号.pdf",
